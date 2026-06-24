@@ -6,147 +6,147 @@
 <title>Follow Builders — 技术深挖</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --paper:#F8F5EF;
-  --paper-deep:#F2EDE4;
-  --surface:#FFFFFF;
-  --code-bg:#1F1D18;
-  --code-text:#E8E4D8;
-  --ink:#1A1A1A;
-  --ink-soft:#2a2a2a;
-  --accent:#3B5BA5;
-  --accent-light:#EBF0FA;
-  --accent-deep:#2e4a8a;
-  --muted:#6B6B6B;
-  --muted-light:#9c9a92;
-  --border:#E2E0DA;
-  --border-strong:#C8C5BB;
-  --success:#1B5E20;
-  --warn:#7C4F00;
-  --danger:#A32D2D;
+  --paper:#f4f0e8;
+  --paper-deep:#ece7db;
+  --surface:#faf8f2;
+  --code-bg:#1f1c16;
+  --code-text:#e8e2d4;
+  --ink:#1c1914;
+  --ink-soft:#3a352c;
+  --accent:#bc5a33;
+  --accent-light:#f1e6dc;
+  --accent-deep:#9e4827;
+  --muted:#8c7f6e;
+  --muted-light:#a79c8a;
+  --border:#d8d2c4;
+  --border-strong:#c8c2b4;
+  --success:#5c6b3a;
+  --warn:#9a6a2a;
+  --danger:#a8472f;
 }
 html,body{height:100%;}
-body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
 
 /* Masthead */
 .masthead{border-bottom:1px solid var(--ink);padding:14px 32px 12px;background:var(--paper);display:flex;align-items:baseline;justify-content:space-between;}
-.masthead-left{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
-.masthead-center{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;}
-.masthead-right{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;}
+.masthead-left{font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+.masthead-center{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;}
+.masthead-right{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;}
 
 .slide{min-height:calc(100vh - 50px);padding:48px 56px 64px;border-bottom:1px solid var(--border);}
 .slide:last-child{border-bottom:none;}
 
-.slide-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;margin-bottom:24px;}
+.slide-number{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;margin-bottom:24px;}
 .slide-number .num{color:var(--accent);font-weight:500;}
 
-h1.display{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:72px;line-height:1.05;letter-spacing:-.025em;color:var(--ink);margin-bottom:24px;}
-h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:42px;line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-bottom:14px;}
+h1.display{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:72px;line-height:1.05;letter-spacing:-.025em;color:var(--ink);margin-bottom:24px;}
+h2.section-title{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:42px;line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-bottom:14px;}
 .subtitle{font-size:16px;line-height:1.7;color:var(--ink-soft);max-width:720px;margin-bottom:28px;}
 
 /* Cover */
 .cover{display:flex;flex-direction:column;justify-content:space-between;min-height:calc(100vh - 50px);}
-.cover-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:32px;}
-.cover-title{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:96px;line-height:.96;letter-spacing:-.035em;color:var(--ink);margin-bottom:32px;max-width:980px;}
-.cover-tagline{font-family:'Newsreader',serif;font-style:italic;font-size:24px;color:var(--muted);line-height:1.4;max-width:560px;font-weight:400;}
+.cover-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:32px;}
+.cover-title{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:96px;line-height:.96;letter-spacing:-.035em;color:var(--ink);margin-bottom:32px;max-width:980px;}
+.cover-tagline{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-size:24px;color:var(--muted);line-height:1.4;max-width:560px;font-weight:400;}
 .cover-toc{margin-top:48px;padding-top:32px;border-top:1px solid var(--ink);display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
 .toc-item{font-size:13px;}
-.toc-num{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:11px;letter-spacing:.1em;margin-bottom:6px;}
-.toc-title{font-family:'Newsreader',serif;font-style:italic;font-size:18px;color:var(--ink);line-height:1.3;}
+.toc-num{font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:11px;letter-spacing:.1em;margin-bottom:6px;}
+.toc-title{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-size:18px;color:var(--ink);line-height:1.3;}
 
 /* Workflow visualizer (node-based) */
 .wf{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:32px;}
-.wf-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;margin-bottom:20px;text-transform:uppercase;}
+.wf-title{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;margin-bottom:20px;text-transform:uppercase;}
 .node-row{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
 .node-box{flex:1;min-width:0;background:var(--paper);border:1px solid var(--border-strong);border-radius:4px;padding:12px 14px;}
 .node-box.start{background:var(--accent-light);border-color:var(--accent);}
-.node-box.code{border-color:#888;background:#FAFAF8;}
-.node-box.http{background:#F4F4FE;border-color:#7F77DD;}
-.node-box.llm{background:#FBF0F4;border-color:#D4537E;}
-.node-box.iter{background:#F0F8F4;border-color:#1B5E20;}
-.node-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.node-box.code{border-color:#b8b0a0;background:#f3efe6;}
+.node-box.http{background:#efe7da;border-color:#c0926f;}
+.node-box.llm{background:#f3e4dc;border-color:#c87a55;}
+.node-box.iter{background:#edeede;border-color:#8a8a5c;}
+.node-label{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
 .node-name{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:2px;line-height:1.3;}
 .node-detail{font-size:10.5px;color:var(--muted);line-height:1.35;}
-.node-arrow{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:16px;flex-shrink:0;}
+.node-arrow{color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:16px;flex-shrink:0;}
 
 /* Code block */
-.code-block{background:var(--code-bg);color:var(--code-text);padding:20px 24px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;margin:14px 0;}
+.code-block{background:var(--code-bg);color:var(--code-text);padding:20px 24px;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;margin:14px 0;}
 .code-block.small{font-size:11.5px;padding:14px 18px;}
 .code-block .kw{color:#C397FF;}
 .code-block .str{color:#A8D58B;}
-.code-block .com{color:#6A6960;font-style:italic;}
+.code-block .com{color:#6A6960;font-style:normal;}
 .code-block .num{color:#F5C26B;}
 .code-block .fn{color:#7BB7E8;}
 .code-block .prop{color:#E8B4A0;}
 
 /* Inline config table */
 .config-table{margin-top:16px;width:100%;border-collapse:collapse;font-size:13px;}
-.config-table th{text-align:left;padding:10px 14px;border-bottom:1px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:500;}
+.config-table th{text-align:left;padding:10px 14px;border-bottom:1px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:500;}
 .config-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
-.config-table td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);width:30%;}
-.config-table td code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;color:var(--ink-soft);}
+.config-table td:first-child{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);width:30%;}
+.config-table td code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;color:var(--ink-soft);}
 
 /* Two col tech */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;}
-.col-h{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:24px;color:var(--ink);margin-bottom:14px;line-height:1.25;}
-.col-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+.col-h{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:24px;color:var(--ink);margin-bottom:14px;line-height:1.25;}
+.col-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
 
 /* Node detail card */
 .node-detail-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:24px 28px;margin-bottom:20px;}
 .node-detail-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.ndh-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;}
-.ndh-type{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase;}
+.ndh-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;}
+.ndh-type{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 10px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase;}
 .ndh-type.trigger{background:#FCF0E0;color:var(--warn);}
-.ndh-type.http{background:#EEEDFE;color:#3C3489;}
-.ndh-type.code{background:#F1EFE8;color:#444441;}
-.ndh-type.llm{background:#FBE5EE;color:#993556;}
-.ndh-type.iter{background:#E1F5EE;color:#085041;}
+.ndh-type.http{background:#ece7db;color:#9e4827;}
+.ndh-type.code{background:#ece7db;color:#5a5247;}
+.ndh-type.llm{background:#f3e4dc;color:#a8502f;}
+.ndh-type.iter{background:#edeede;color:#5c6b3a;}
 .ndh-type.if{background:#FAEEDA;color:#633806;}
-.ndh-type.tmpl{background:#E6F1FB;color:#0C447C;}
-.ndh-title{font-family:'Newsreader',serif;font-style:italic;font-size:26px;color:var(--ink);margin:6px 0 2px;}
+.ndh-type.tmpl{background:#f1e6dc;color:#9e4827;}
+.ndh-title{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:26px;color:var(--ink);margin:6px 0 2px;}
 .ndh-purpose{font-size:14px;color:var(--ink-soft);line-height:1.6;}
 
 /* Variable definition */
 .var-list{margin-top:12px;}
 .var-row{display:grid;grid-template-columns:140px 100px 1fr;gap:14px;padding:8px 0;border-bottom:1px dashed var(--border);font-size:12.5px;align-items:center;}
 .var-row:last-child{border-bottom:none;}
-.var-name{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:500;}
-.var-type{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:11px;}
+.var-name{font-family:'IBM Plex Mono',monospace;color:var(--accent);font-weight:500;}
+.var-type{font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:11px;}
 .var-source{color:var(--ink-soft);line-height:1.5;}
 
 /* Pitfall card */
 .pitfall{background:var(--surface);border-left:3px solid var(--danger);border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px;margin-bottom:16px;border-radius:0 4px 4px 0;}
 .pitfall.warn{border-left-color:var(--warn);}
 .pitfall.lesson{border-left-color:var(--success);}
-.pitfall-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:500;}
+.pitfall-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:500;}
 .pitfall .pitfall-label{color:var(--danger);}
 .pitfall.warn .pitfall-label{color:var(--warn);}
 .pitfall.lesson .pitfall-label{color:var(--success);}
-.pitfall h5{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:22px;color:var(--ink);margin-bottom:10px;line-height:1.25;}
+.pitfall h5{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:22px;color:var(--ink);margin-bottom:10px;line-height:1.25;}
 .pitfall p{font-size:13.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;}
 .pitfall p:last-child{margin-bottom:0;}
-.pitfall code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;color:var(--ink-soft);}
+.pitfall code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;color:var(--ink-soft);}
 
 /* Section label */
-.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin:24px 0 14px;font-weight:500;}
+.section-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin:24px 0 14px;font-weight:500;}
 
 /* Section divider */
 .section-divider{display:flex;align-items:center;gap:16px;margin:32px 0 24px;}
-.section-divider .label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;}
+.section-divider .label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;}
 .section-divider .line{flex:1;height:1px;background:var(--border-strong);}
 
 /* Steps */
 .steps{counter-reset:step-counter;margin-top:24px;}
 .step-item{counter-increment:step-counter;display:grid;grid-template-columns:60px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--border);}
 .step-item:last-child{border-bottom:1px solid var(--border);}
-.step-num{font-family:'Newsreader',serif;font-style:italic;font-size:32px;color:var(--accent);line-height:1;}
+.step-num{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-size:32px;color:var(--accent);line-height:1;}
 .step-num::before{content:counter(step-counter,decimal-leading-zero);}
-.step-content h5{font-family:'Newsreader',serif;font-style:italic;font-size:20px;color:var(--ink);margin-bottom:8px;line-height:1.3;}
+.step-content h5{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-size:20px;color:var(--ink);margin-bottom:8px;line-height:1.3;}
 .step-content p{font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;}
-.step-content code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;}
+.step-content code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;}
 
 @media (max-width:960px){
   .slide{padding:36px 28px;}
@@ -231,7 +231,7 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
         <div class="node-detail">裁剪 + 控 token</div>
       </div>
     </div>
-    <div style="text-align:center;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:14px;margin:8px 0;">↓</div>
+    <div style="text-align:center;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:14px;margin:8px 0;">↓</div>
     <div class="node-row">
       <div class="node-box llm">
         <div class="node-label">LLM</div>
@@ -257,7 +257,7 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
         <div class="node-detail">按 frequency 过滤</div>
       </div>
     </div>
-    <div style="text-align:center;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:14px;margin:8px 0;">↓</div>
+    <div style="text-align:center;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:14px;margin:8px 0;">↓</div>
     <div class="node-row">
       <div class="node-box iter" style="flex:0 0 280px;">
         <div class="node-label">Iteration · 循环节点</div>
@@ -508,7 +508,7 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
 
   <span class="com">// 今日 insight 用 Newsreader italic + 左边框</span>
   <span class="kw">const</span> insightHtml = <span class="str">`&lt;div style="border-left:3px solid ${ACCENT};padding:8px 16px;
-    font-family:Georgia,serif;font-style:italic;"&gt;${digest.insight}&lt;/div&gt;`</span>;
+    font-family:Georgia,serif;font-style:normal;"&gt;${digest.insight}&lt;/div&gt;`</span>;
 
   <span class="kw">return</span> { <span class="prop">subject</span>: <span class="str">`Follow Builders 日报 · ${dateStr}`</span>, <span class="prop">html_body</span>: html };
 }</pre>
@@ -630,16 +630,16 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
         <div class="node-detail">校验 + 去重 + 追加</div>
       </div>
       <div class="node-arrow">→</div>
-      <div class="node-box" style="background:#FDF4DD;border-color:#BA7517;">
+      <div class="node-box" style="background:#f3e9d8;border-color:#9a6a2a;">
         <div class="node-label">IF/ELSE</div>
         <div class="node-name">Check Success</div>
         <div class="node-detail">success == true ?</div>
       </div>
     </div>
-    <div style="text-align:center;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:14px;margin:8px 0;">分支 ↓</div>
+    <div style="text-align:center;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:14px;margin:8px 0;">分支 ↓</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--success);letter-spacing:.12em;margin-bottom:6px;">IF TRUE · 订阅成功路径</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--success);letter-spacing:.12em;margin-bottom:6px;">IF TRUE · 订阅成功路径</div>
         <div class="node-row">
           <div class="node-box http">
             <div class="node-label">HTTP · PUT</div>
@@ -655,9 +655,9 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
         </div>
       </div>
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--danger);letter-spacing:.12em;margin-bottom:6px;">ELSE · 失败路径</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--danger);letter-spacing:.12em;margin-bottom:6px;">ELSE · 失败路径</div>
         <div class="node-row">
-          <div class="node-box" style="background:#E6F1FB;border-color:#185FA5;">
+          <div class="node-box" style="background:#f1e6dc;border-color:#9e4827;">
             <div class="node-label">Template</div>
             <div class="node-name">Failure Response</div>
             <div class="node-detail">返回错误 JSON</div>
@@ -1043,7 +1043,7 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
 <!-- Closing -->
 <section class="slide" style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:calc(100vh - 50px);">
   <div class="slide-number"><span class="num">END</span></div>
-  <h2 style="font-family:'Newsreader',serif;font-style:italic;font-size:64px;line-height:1.1;color:var(--ink);max-width:880px;margin-bottom:32px;letter-spacing:-.02em;">
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:700;font-size:64px;line-height:1.1;color:var(--ink);max-width:880px;margin-bottom:32px;letter-spacing:-.02em;">
     一份 Workflow 写好了，<br>
     <span style="color:var(--accent);">可以做的事就远不止这一件。</span>
   </h2>
@@ -1056,15 +1056,15 @@ h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:40
   </p>
   <div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--ink);width:100%;display:flex;gap:48px;flex-wrap:wrap;">
     <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">DSL Export</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">DSL Export</div>
       <div style="font-size:14px;">两个 Workflow 已导出，可一键导入</div>
     </div>
     <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Code Snippets</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Code Snippets</div>
       <div style="font-size:14px;">所有 Code 节点源码已整理</div>
     </div>
     <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Q &amp; A</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Q &amp; A</div>
       <div style="font-size:14px;">现场提问 · 或会后单独聊</div>
     </div>
   </div>

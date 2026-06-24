@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Follow Builders — 技术深挖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --paper:#F8F5EF;
+  --paper-deep:#F2EDE4;
+  --surface:#FFFFFF;
+  --code-bg:#1F1D18;
+  --code-text:#E8E4D8;
+  --ink:#1A1A1A;
+  --ink-soft:#2a2a2a;
+  --accent:#3B5BA5;
+  --accent-light:#EBF0FA;
+  --accent-deep:#2e4a8a;
+  --muted:#6B6B6B;
+  --muted-light:#9c9a92;
+  --border:#E2E0DA;
+  --border-strong:#C8C5BB;
+  --success:#1B5E20;
+  --warn:#7C4F00;
+  --danger:#A32D2D;
+}
+html,body{height:100%;}
+body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+
+/* Masthead */
+.masthead{border-bottom:1px solid var(--ink);padding:14px 32px 12px;background:var(--paper);display:flex;align-items:baseline;justify-content:space-between;}
+.masthead-left{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+.masthead-center{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;}
+.masthead-right{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;}
+
+.slide{min-height:calc(100vh - 50px);padding:48px 56px 64px;border-bottom:1px solid var(--border);}
+.slide:last-child{border-bottom:none;}
+
+.slide-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;margin-bottom:24px;}
+.slide-number .num{color:var(--accent);font-weight:500;}
+
+h1.display{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:72px;line-height:1.05;letter-spacing:-.025em;color:var(--ink);margin-bottom:24px;}
+h2.section-title{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:42px;line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-bottom:14px;}
+.subtitle{font-size:16px;line-height:1.7;color:var(--ink-soft);max-width:720px;margin-bottom:28px;}
+
+/* Cover */
+.cover{display:flex;flex-direction:column;justify-content:space-between;min-height:calc(100vh - 50px);}
+.cover-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:32px;}
+.cover-title{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:96px;line-height:.96;letter-spacing:-.035em;color:var(--ink);margin-bottom:32px;max-width:980px;}
+.cover-tagline{font-family:'Newsreader',serif;font-style:italic;font-size:24px;color:var(--muted);line-height:1.4;max-width:560px;font-weight:400;}
+.cover-toc{margin-top:48px;padding-top:32px;border-top:1px solid var(--ink);display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.toc-item{font-size:13px;}
+.toc-num{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:11px;letter-spacing:.1em;margin-bottom:6px;}
+.toc-title{font-family:'Newsreader',serif;font-style:italic;font-size:18px;color:var(--ink);line-height:1.3;}
+
+/* Workflow visualizer (node-based) */
+.wf{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:32px;}
+.wf-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;margin-bottom:20px;text-transform:uppercase;}
+.node-row{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
+.node-box{flex:1;min-width:0;background:var(--paper);border:1px solid var(--border-strong);border-radius:4px;padding:12px 14px;}
+.node-box.start{background:var(--accent-light);border-color:var(--accent);}
+.node-box.code{border-color:#888;background:#FAFAF8;}
+.node-box.http{background:#F4F4FE;border-color:#7F77DD;}
+.node-box.llm{background:#FBF0F4;border-color:#D4537E;}
+.node-box.iter{background:#F0F8F4;border-color:#1B5E20;}
+.node-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.node-name{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:2px;line-height:1.3;}
+.node-detail{font-size:10.5px;color:var(--muted);line-height:1.35;}
+.node-arrow{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:16px;flex-shrink:0;}
+
+/* Code block */
+.code-block{background:var(--code-bg);color:var(--code-text);padding:20px 24px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;margin:14px 0;}
+.code-block.small{font-size:11.5px;padding:14px 18px;}
+.code-block .kw{color:#C397FF;}
+.code-block .str{color:#A8D58B;}
+.code-block .com{color:#6A6960;font-style:italic;}
+.code-block .num{color:#F5C26B;}
+.code-block .fn{color:#7BB7E8;}
+.code-block .prop{color:#E8B4A0;}
+
+/* Inline config table */
+.config-table{margin-top:16px;width:100%;border-collapse:collapse;font-size:13px;}
+.config-table th{text-align:left;padding:10px 14px;border-bottom:1px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:500;}
+.config-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
+.config-table td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);width:30%;}
+.config-table td code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;color:var(--ink-soft);}
+
+/* Two col tech */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;}
+.col-h{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:24px;color:var(--ink);margin-bottom:14px;line-height:1.25;}
+.col-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+
+/* Node detail card */
+.node-detail-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:24px 28px;margin-bottom:20px;}
+.node-detail-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.ndh-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;}
+.ndh-type{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase;}
+.ndh-type.trigger{background:#FCF0E0;color:var(--warn);}
+.ndh-type.http{background:#EEEDFE;color:#3C3489;}
+.ndh-type.code{background:#F1EFE8;color:#444441;}
+.ndh-type.llm{background:#FBE5EE;color:#993556;}
+.ndh-type.iter{background:#E1F5EE;color:#085041;}
+.ndh-type.if{background:#FAEEDA;color:#633806;}
+.ndh-type.tmpl{background:#E6F1FB;color:#0C447C;}
+.ndh-title{font-family:'Newsreader',serif;font-style:italic;font-size:26px;color:var(--ink);margin:6px 0 2px;}
+.ndh-purpose{font-size:14px;color:var(--ink-soft);line-height:1.6;}
+
+/* Variable definition */
+.var-list{margin-top:12px;}
+.var-row{display:grid;grid-template-columns:140px 100px 1fr;gap:14px;padding:8px 0;border-bottom:1px dashed var(--border);font-size:12.5px;align-items:center;}
+.var-row:last-child{border-bottom:none;}
+.var-name{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:500;}
+.var-type{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:11px;}
+.var-source{color:var(--ink-soft);line-height:1.5;}
+
+/* Pitfall card */
+.pitfall{background:var(--surface);border-left:3px solid var(--danger);border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px;margin-bottom:16px;border-radius:0 4px 4px 0;}
+.pitfall.warn{border-left-color:var(--warn);}
+.pitfall.lesson{border-left-color:var(--success);}
+.pitfall-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:500;}
+.pitfall .pitfall-label{color:var(--danger);}
+.pitfall.warn .pitfall-label{color:var(--warn);}
+.pitfall.lesson .pitfall-label{color:var(--success);}
+.pitfall h5{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:22px;color:var(--ink);margin-bottom:10px;line-height:1.25;}
+.pitfall p{font-size:13.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;}
+.pitfall p:last-child{margin-bottom:0;}
+.pitfall code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;color:var(--ink-soft);}
+
+/* Section label */
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin:24px 0 14px;font-weight:500;}
+
+/* Section divider */
+.section-divider{display:flex;align-items:center;gap:16px;margin:32px 0 24px;}
+.section-divider .label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;}
+.section-divider .line{flex:1;height:1px;background:var(--border-strong);}
+
+/* Steps */
+.steps{counter-reset:step-counter;margin-top:24px;}
+.step-item{counter-increment:step-counter;display:grid;grid-template-columns:60px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--border);}
+.step-item:last-child{border-bottom:1px solid var(--border);}
+.step-num{font-family:'Newsreader',serif;font-style:italic;font-size:32px;color:var(--accent);line-height:1;}
+.step-num::before{content:counter(step-counter,decimal-leading-zero);}
+.step-content h5{font-family:'Newsreader',serif;font-style:italic;font-size:20px;color:var(--ink);margin-bottom:8px;line-height:1.3;}
+.step-content p{font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;}
+.step-content code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--paper-deep);padding:1px 6px;border-radius:3px;}
+
+@media (max-width:960px){
+  .slide{padding:36px 28px;}
+  h1.display,.cover-title{font-size:48px;}
+  h2.section-title{font-size:30px;}
+  .cover-toc{grid-template-columns:1fr 1fr;}
+  .two-col{grid-template-columns:1fr;gap:28px;}
+  .node-row{flex-wrap:wrap;}
+  .node-arrow{display:none;}
+  .var-row{grid-template-columns:1fr;gap:4px;}
+  .step-item{grid-template-columns:40px 1fr;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-left">follow builders</div>
+  <div class="masthead-center">Vol. 01 · No. 2 · Technical Deep Dive</div>
+  <div class="masthead-right">2026 · 06</div>
+</header>
+
+<!-- COVER -->
+<section class="slide cover">
+  <div>
+    <div class="cover-eyebrow">A Technical Deep Dive</div>
+    <h1 class="cover-title">How we built it,<br>node by node.</h1>
+    <p class="cover-tagline">14 个 Dify 节点、3 个外部服务、8 个真实踩过的坑——这份文档把它们都摊开来。</p>
+  </div>
+  <div>
+    <div class="cover-toc">
+      <div class="toc-item">
+        <div class="toc-num">01</div>
+        <div class="toc-title">Workflow A 节点拆解</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">02</div>
+        <div class="toc-title">Workflow B 节点拆解</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">03</div>
+        <div class="toc-title">外部服务整合</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">04</div>
+        <div class="toc-title">踩过的坑</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow A Overview -->
+<section class="slide">
+  <div class="slide-number"><span class="num">01</span> · Workflow A · Overview</div>
+  <h2 class="section-title">Workflow A · 每日生成日报</h2>
+  <p class="subtitle">9 个节点，从定时触发到批量邮件发送，串成一条不可分割的流水线。每天早上 9 点自动跑一次，耗时约 30 秒。</p>
+  
+  <div class="wf">
+    <div class="wf-title">Dify Workflow A · 节点链路</div>
+    <div class="node-row">
+      <div class="node-box start">
+        <div class="node-label">Trigger</div>
+        <div class="node-name">Schedule</div>
+        <div class="node-detail">每天 09:00 UTC+8</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box http">
+        <div class="node-label">HTTP</div>
+        <div class="node-name">Fetch X Feed</div>
+        <div class="node-detail">GET feed-x.json</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box http">
+        <div class="node-label">HTTP</div>
+        <div class="node-name">Fetch Podcast</div>
+        <div class="node-detail">GET feed-podcasts.json</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box code">
+        <div class="node-label">Code</div>
+        <div class="node-name">Prepare Data</div>
+        <div class="node-detail">裁剪 + 控 token</div>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:14px;margin:8px 0;">↓</div>
+    <div class="node-row">
+      <div class="node-box llm">
+        <div class="node-label">LLM</div>
+        <div class="node-name">Generate Digest</div>
+        <div class="node-detail">DeepSeek V4 Pro</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box code">
+        <div class="node-label">Code</div>
+        <div class="node-name">Render Email</div>
+        <div class="node-detail">HTML 邮件模板</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box http">
+        <div class="node-label">HTTP</div>
+        <div class="node-name">Get Subscribers</div>
+        <div class="node-detail">读 GitHub 数据库</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box code">
+        <div class="node-label">Code</div>
+        <div class="node-name">Filter Subscribers</div>
+        <div class="node-detail">按 frequency 过滤</div>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:14px;margin:8px 0;">↓</div>
+    <div class="node-row">
+      <div class="node-box iter" style="flex:0 0 280px;">
+        <div class="node-label">Iteration · 循环节点</div>
+        <div class="node-name">Send to Each</div>
+        <div class="node-detail">遍历每个订阅者，串行执行内部节点</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box code">
+        <div class="node-label">[在 Iteration 内]</div>
+        <div class="node-name">Extract Email</div>
+        <div class="node-detail">取 item.email</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box http">
+        <div class="node-label">[在 Iteration 内]</div>
+        <div class="node-name">Send Email</div>
+        <div class="node-detail">POST Resend API</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow A Node Detail 1 -->
+<section class="slide">
+  <div class="slide-number"><span class="num">02</span> · Workflow A · Node Detail</div>
+  <h2 class="section-title">Node 1-3 · 触发与数据抓取</h2>
+  <p class="subtitle">前三个节点的目标：以零成本拿到当天最值得报道的素材。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.1</div>
+        <div class="ndh-title">Schedule Trigger</div>
+      </div>
+      <div class="ndh-type trigger">Trigger</div>
+    </div>
+    <div class="ndh-purpose">每天定点触发整个 Workflow。Dify 的定时器是托管的——你不用维护 cron 服务器。</div>
+    <table class="config-table">
+      <tr><td>Frequency</td><td><code>Daily</code></td></tr>
+      <tr><td>Time</td><td><code>09:00 AM</code></td></tr>
+      <tr><td>Timezone</td><td><code>UTC+8 · Asia/Shanghai</code></td></tr>
+    </table>
+    <p style="margin-top:14px;font-size:13px;color:var(--muted);">⚠ 注意：Test Run 时 Schedule 是"监听"状态，要么改时间到下一分钟自然触发,要么右键节点选 Run from here。</p>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.2 / A.3</div>
+        <div class="ndh-title">Fetch X Feed / Fetch Podcast Feed</div>
+      </div>
+      <div class="ndh-type http">HTTP Request</div>
+    </div>
+    <div class="ndh-purpose">从开源仓库 follow-builders 拉取已经聚合好的 JSON feed。完全不需要 API Key、不需要爬虫。</div>
+    <table class="config-table">
+      <tr><td>Method</td><td><code>GET</code></td></tr>
+      <tr><td>URL · X Feed</td><td><code>raw.githubusercontent.com/zarazhangrui/follow-builders/main/feed-x.json</code></td></tr>
+      <tr><td>URL · Podcast</td><td><code>raw.githubusercontent.com/zarazhangrui/follow-builders/main/feed-podcasts.json</code></td></tr>
+      <tr><td>Headers</td><td>无</td></tr>
+      <tr><td>Output</td><td><code>body</code> (String) — JSON 字符串，包含 26 位 builders 的推文 + 播客 transcript</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow A Node Detail 2 -->
+<section class="slide">
+  <div class="slide-number"><span class="num">03</span> · Workflow A · Node Detail</div>
+  <h2 class="section-title">Node 4 · 数据预处理（关键）</h2>
+  <p class="subtitle">这一步决定了 LLM 看到什么。裁剪不当 → 内容太多 → token 爆炸 + 摘要质量下降。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.4</div>
+        <div class="ndh-title">Prepare Data</div>
+      </div>
+      <div class="ndh-type code">Code · JavaScript</div>
+    </div>
+    <div class="ndh-purpose">把两个 feed 合并、按点赞数过滤低质量推文、控制每个 builder 最多 2 条、裁剪播客 transcript 到 2500 字。</div>
+    
+    <div class="section-eyebrow">输入变量</div>
+    <div class="var-list">
+      <div class="var-row">
+        <div class="var-name">x_body</div>
+        <div class="var-type">String</div>
+        <div class="var-source">← Fetch X Feed / body</div>
+      </div>
+      <div class="var-row">
+        <div class="var-name">pod_body</div>
+        <div class="var-type">String</div>
+        <div class="var-source">← Fetch Podcast Feed / body</div>
+      </div>
+    </div>
+
+    <div class="section-eyebrow">核心代码</div>
+    <pre class="code-block small"><span class="kw">function</span> <span class="fn">main</span>({ x_body, pod_body }) {
+  <span class="kw">const</span> xData = <span class="fn">JSON.parse</span>(x_body);
+  <span class="kw">const</span> podData = <span class="fn">JSON.parse</span>(pod_body);
+
+  <span class="com">// 取前 8 位 builder，每人最多 2 条点赞过 5 的推文</span>
+  <span class="kw">const</span> builders = (xData.x || [])
+    .<span class="fn">filter</span>(b => b.tweets && b.tweets.length > <span class="num">0</span>)
+    .<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">8</span>)
+    .<span class="fn">map</span>(b => ({
+      <span class="prop">name</span>: b.name,
+      <span class="prop">bio</span>: (b.bio || <span class="str">''</span>).<span class="fn">split</span>(<span class="str">'\n'</span>)[<span class="num">0</span>].<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">80</span>),
+      <span class="prop">tweets</span>: b.tweets
+        .<span class="fn">filter</span>(t => t.likes >= <span class="num">5</span> && t.text.length >= <span class="num">30</span>)
+        .<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">2</span>)
+        .<span class="fn">map</span>(t => ({ <span class="prop">text</span>: t.text, <span class="prop">url</span>: t.url, <span class="prop">likes</span>: t.likes }))
+    }));
+
+  <span class="com">// 取最新 1 集播客，transcript 裁到 2500 字</span>
+  <span class="kw">const</span> episodes = podData.podcasts || podData.episodes || [];
+  <span class="kw">const</span> podcast = episodes[<span class="num">0</span>] ? {
+    <span class="prop">title</span>: episodes[<span class="num">0</span>].title,
+    <span class="prop">transcript</span>: (episodes[<span class="num">0</span>].transcript || <span class="str">''</span>).<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">2500</span>)
+  } : <span class="kw">null</span>;
+
+  <span class="kw">return</span> {
+    <span class="prop">builders_json</span>: <span class="fn">JSON.stringify</span>(builders, <span class="kw">null</span>, <span class="num">2</span>),
+    <span class="prop">podcast_json</span>: <span class="fn">JSON.stringify</span>(podcast, <span class="kw">null</span>, <span class="num">2</span>),
+    <span class="prop">builder_count</span>: builders.length
+  };
+}</pre>
+
+    <div class="section-eyebrow">输出变量</div>
+    <div class="var-list">
+      <div class="var-row"><div class="var-name">builders_json</div><div class="var-type">String</div><div class="var-source">已裁剪的 builders 数据，JSON 字符串</div></div>
+      <div class="var-row"><div class="var-name">podcast_json</div><div class="var-type">String</div><div class="var-source">最新一集播客（含截断 transcript）</div></div>
+      <div class="var-row"><div class="var-name">builder_count</div><div class="var-type">Number</div><div class="var-source">实际入选的 builder 数量，调试用</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow A Node Detail 3 -->
+<section class="slide">
+  <div class="slide-number"><span class="num">04</span> · Workflow A · Node Detail</div>
+  <h2 class="section-title">Node 5 · 中文摘要生成</h2>
+  <p class="subtitle">整个 Workflow 唯一调用 LLM 的节点。Prompt 写得好不好，直接决定产品质量。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.5</div>
+        <div class="ndh-title">Generate Digest</div>
+      </div>
+      <div class="ndh-type llm">LLM</div>
+    </div>
+    <div class="ndh-purpose">把英文推文和播客转录提炼成有判断的中文日报。要求输出严格 JSON 格式，下一步代码直接消费。</div>
+
+    <table class="config-table">
+      <tr><td>Model</td><td><code>deepseek-v4-pro</code></td></tr>
+      <tr><td>Temperature</td><td><code>0.5</code></td></tr>
+      <tr><td>Max Tokens</td><td><code>2500</code></td></tr>
+      <tr><td>Thinking Mode</td><td><code>False</code> · 关键！开启会有 thinking 标签污染输出</td></tr>
+    </table>
+
+    <div class="section-eyebrow">System Prompt</div>
+    <pre class="code-block small">你是一位 AI 行业读物的编辑，负责把顶尖 builders 的英文推文和播客内容提炼成简洁、有洞察的中文日报。
+
+风格要求：
+- 克制、有判断力，像报纸文化版的语气
+- 不用网络流行语、不过度感叹、不用 emoji
+- 每条摘要 2-3 句话，不超过 80 字
+- 重点是"这条说了什么有意思的事"，不是简单翻译
+- 必须保留每位 builder 的姓名和职位
+
+输出格式：严格的 JSON，不要有任何前后多余文字（不要 markdown 代码块包裹）。</pre>
+
+    <div class="section-eyebrow">User Prompt（含变量插值）</div>
+    <pre class="code-block small">今天是 {{sys.current_datetime}}。
+
+以下是今天 AI builders 的推文（JSON 格式）：
+{{builders_json}}
+
+以下是今天的播客内容（JSON 格式，可能为空）：
+{{podcast_json}}
+
+请生成一份中文日报，输出严格 JSON 格式，结构如下：
+{
+  <span class="prop">"builders"</span>: [{ <span class="prop">"name"</span>, <span class="prop">"role"</span>, <span class="prop">"summary"</span>, <span class="prop">"url"</span> }],
+  <span class="prop">"podcast"</span>: { <span class="prop">"show"</span>, <span class="prop">"title"</span>, <span class="prop">"bullets"</span>: [...], <span class="prop">"url"</span> },
+  <span class="prop">"insight"</span>: <span class="str">"今日一句话总结，点出共同主题，像格言一样"</span>
+}</pre>
+
+    <div class="section-eyebrow">实际输出节选</div>
+    <pre class="code-block small">{
+  <span class="prop">"builders"</span>: [
+    {
+      <span class="prop">"name"</span>: <span class="str">"Aaron Levie"</span>,
+      <span class="prop">"role"</span>: <span class="str">"Box CEO"</span>,
+      <span class="prop">"summary"</span>: <span class="str">"大型企业正在把 token 预算当成新的运营成本管理——就像差旅费、营销预算一样。这将催生专门做 AI 支出可见性的新创业公司。"</span>,
+      <span class="prop">"url"</span>: <span class="str">"https://x.com/levie/..."</span>
+    }
+  ],
+  <span class="prop">"insight"</span>: <span class="str">"AI 的竞争正在从模型能力转移到谁能把 token 花在刀刃上。"</span>
+}</pre>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow A Node Detail 4 -->
+<section class="slide">
+  <div class="slide-number"><span class="num">05</span> · Workflow A · Node Detail</div>
+  <h2 class="section-title">Node 6 · 渲染邮件 HTML</h2>
+  <p class="subtitle">把 LLM 输出的结构化 JSON 渲染成内联样式的邮件 HTML。所有样式必须 inline，因为 Gmail / Outlook 会剥掉 &lt;style&gt; 块。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.6</div>
+        <div class="ndh-title">Render Email</div>
+      </div>
+      <div class="ndh-type code">Code · JavaScript</div>
+    </div>
+    <div class="ndh-purpose">解析 LLM 的 JSON 输出，渲染成 600px 宽的响应式 HTML 邮件。包含 header / 播客卡片 / builders 列表 / 今日 insight / footer。</div>
+
+    <div class="section-eyebrow">输入 / 输出</div>
+    <div class="var-list">
+      <div class="var-row"><div class="var-name">llm_text</div><div class="var-type">String (in)</div><div class="var-source">← Generate Digest / text</div></div>
+      <div class="var-row"><div class="var-name">subject</div><div class="var-type">String (out)</div><div class="var-source">邮件主题：Follow Builders 日报 · 6月18日</div></div>
+      <div class="var-row"><div class="var-name">html_body</div><div class="var-type">String (out)</div><div class="var-source">完整 HTML 字符串，含 inline CSS</div></div>
+    </div>
+
+    <div class="section-eyebrow">核心渲染逻辑（节选）</div>
+    <pre class="code-block small"><span class="kw">function</span> <span class="fn">main</span>({ llm_text }) {
+  <span class="kw">let</span> digest;
+  <span class="kw">try</span> { digest = <span class="fn">JSON.parse</span>(llm_text); }
+  <span class="kw">catch</span> (e) {
+    <span class="com">// 兼容性兜底：万一 LLM 输出夹带其他文字，尝试提取 { ... }</span>
+    <span class="kw">const</span> match = llm_text.<span class="fn">match</span>(<span class="str">/\{[\s\S]*\}/</span>);
+    digest = match ? <span class="fn">JSON.parse</span>(match[<span class="num">0</span>]) : { <span class="prop">builders</span>: [] };
+  }
+
+  <span class="com">// 设计 token (与网站一致)</span>
+  <span class="kw">const</span> PAPER = <span class="str">'#F8F5EF'</span>;
+  <span class="kw">const</span> ACCENT = <span class="str">'#3B5BA5'</span>;
+
+  <span class="com">// 渲染 builders 列表</span>
+  <span class="kw">const</span> buildersHtml = digest.builders.<span class="fn">map</span>(b => <span class="str">`
+    &lt;tr&gt;&lt;td style="padding:20px 32px;"&gt;
+      &lt;div style="font-size:14px;font-weight:500;"&gt;${b.name}&lt;/div&gt;
+      &lt;div style="color:#6B6B6B;"&gt;${b.role}&lt;/div&gt;
+      &lt;div&gt;${b.summary}&lt;/div&gt;
+      &lt;a href="${b.url}" style="color:${ACCENT};"&gt;查看原推 →&lt;/a&gt;
+    &lt;/td&gt;&lt;/tr&gt;
+  `</span>).<span class="fn">join</span>(<span class="str">''</span>);
+
+  <span class="com">// 今日 insight 用 Newsreader italic + 左边框</span>
+  <span class="kw">const</span> insightHtml = <span class="str">`&lt;div style="border-left:3px solid ${ACCENT};padding:8px 16px;
+    font-family:Georgia,serif;font-style:italic;"&gt;${digest.insight}&lt;/div&gt;`</span>;
+
+  <span class="kw">return</span> { <span class="prop">subject</span>: <span class="str">`Follow Builders 日报 · ${dateStr}`</span>, <span class="prop">html_body</span>: html };
+}</pre>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow A Iteration -->
+<section class="slide">
+  <div class="slide-number"><span class="num">06</span> · Workflow A · Node Detail</div>
+  <h2 class="section-title">Node 7-9 · 读数据库 · 过滤 · 循环发送</h2>
+  <p class="subtitle">把生成好的邮件，按订阅者偏好分发出去。Iteration 节点是 Workflow A 最复杂的部分。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.7</div>
+        <div class="ndh-title">Get Subscribers</div>
+      </div>
+      <div class="ndh-type http">HTTP Request</div>
+    </div>
+    <div class="ndh-purpose">用 GitHub Contents API 读取 subscribers.json。返回 base64 编码的内容 + 文件 SHA。</div>
+    <table class="config-table">
+      <tr><td>URL</td><td><code>api.github.com/repos/{owner}/{repo}/contents/subscribers.json</code></td></tr>
+      <tr><td>Headers</td><td><code>Authorization: Bearer {GitHub PAT}</code></td></tr>
+      <tr><td>Output.body.content</td><td>base64 编码的 JSON 内容</td></tr>
+    </table>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.8</div>
+        <div class="ndh-title">Filter Subscribers</div>
+      </div>
+      <div class="ndh-type code">Code · JavaScript</div>
+    </div>
+    <div class="ndh-purpose">解码 base64、按 frequency 过滤。daily 用户每天发，weekly 用户只在周一发。</div>
+    <pre class="code-block small"><span class="kw">function</span> <span class="fn">main</span>({ file_response }) {
+  <span class="kw">const</span> fileData = <span class="fn">JSON.parse</span>(file_response);
+  <span class="kw">const</span> decoded = <span class="fn">Buffer.from</span>(fileData.content.<span class="fn">replace</span>(<span class="str">/\n/g</span>, <span class="str">''</span>), <span class="str">'base64'</span>).<span class="fn">toString</span>();
+  <span class="kw">const</span> data = <span class="fn">JSON.parse</span>(decoded);
+
+  <span class="kw">const</span> today = <span class="kw">new</span> <span class="fn">Date</span>();
+  <span class="kw">const</span> isMonday = today.<span class="fn">getDay</span>() === <span class="num">1</span>;
+
+  <span class="kw">const</span> toSend = data.subscribers.<span class="fn">filter</span>(s => {
+    <span class="kw">if</span> (s.active !== <span class="kw">true</span>) <span class="kw">return</span> <span class="kw">false</span>;
+    <span class="kw">if</span> (s.frequency === <span class="str">'daily'</span>) <span class="kw">return</span> <span class="kw">true</span>;
+    <span class="kw">if</span> (s.frequency === <span class="str">'weekly'</span> && isMonday) <span class="kw">return</span> <span class="kw">true</span>;
+    <span class="kw">return</span> <span class="kw">false</span>;
+  });
+
+  <span class="kw">return</span> { <span class="prop">recipients</span>: toSend, <span class="prop">send_count</span>: toSend.length };
+}</pre>
+    <div class="section-eyebrow">输出变量类型 · 关键</div>
+    <div class="var-list">
+      <div class="var-row"><div class="var-name">recipients</div><div class="var-type">Array[Object]</div><div class="var-source">必须是 Array[Object]，下一步 Iteration 才能消费</div></div>
+    </div>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">A.9</div>
+        <div class="ndh-title">Send to Each (Iteration)</div>
+      </div>
+      <div class="ndh-type iter">Iteration · 循环节点</div>
+    </div>
+    <div class="ndh-purpose">遍历 recipients 数组，对每个订阅者跑内部子流程：提取 email → 调 Resend 发邮件。</div>
+    <table class="config-table">
+      <tr><td>Input (Array)</td><td><code>Filter Subscribers / recipients</code></td></tr>
+      <tr><td>Error Response Method</td><td><code>Continue on Error</code> · 关键！否则任一失败整个循环停</td></tr>
+      <tr><td>Parallel Mode</td><td><code>OFF</code> · 串行避免触发 Resend 速率限制</td></tr>
+    </table>
+    
+    <div class="section-eyebrow">Iteration 内部 · Extract Email (Code)</div>
+    <pre class="code-block small"><span class="kw">function</span> <span class="fn">main</span>({ subscriber }) {
+  <span class="kw">return</span> {
+    <span class="prop">email</span>: subscriber.email || <span class="str">''</span>,
+    <span class="prop">name</span>: subscriber.email ? subscriber.email.<span class="fn">split</span>(<span class="str">'@'</span>)[<span class="num">0</span>] : <span class="str">'there'</span>
+  };
+}</pre>
+    <p style="margin-top:8px;font-size:12px;color:var(--muted);">⚠ <code>subscriber</code> 输入必须绑定到 <code>Iteration / item</code>，不是 Filter Subscribers / recipients（整个数组）。</p>
+
+    <div class="section-eyebrow">Iteration 内部 · Send Email (HTTP POST)</div>
+    <pre class="code-block small">{
+  <span class="prop">"from"</span>: <span class="str">"digest@yourdomain.com"</span>,
+  <span class="prop">"to"</span>: [<span class="str">"{{#extract_email.email#}}"</span>],
+  <span class="prop">"subject"</span>: <span class="str">"{{#render_email.subject#}}"</span>,
+  <span class="prop">"html"</span>: <span class="str">"{{#render_email.html_body#}}"</span>
+}</pre>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow B Overview -->
+<section class="slide">
+  <div class="slide-number"><span class="num">07</span> · Workflow B · Overview</div>
+  <h2 class="section-title">Workflow B · 订阅注册</h2>
+  <p class="subtitle">5 个节点，处理用户订阅。Webhook 触发，分成两条路：写入数据库或返回错误。</p>
+
+  <div class="wf">
+    <div class="wf-title">Dify Workflow B · 节点链路</div>
+    <div class="node-row">
+      <div class="node-box start">
+        <div class="node-label">Trigger</div>
+        <div class="node-name">Webhook</div>
+        <div class="node-detail">POST email/topics/frequency</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box http">
+        <div class="node-label">HTTP</div>
+        <div class="node-name">Get Subscribers File</div>
+        <div class="node-detail">读取当前数据 + SHA</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box code">
+        <div class="node-label">Code</div>
+        <div class="node-name">Process Subscribers</div>
+        <div class="node-detail">校验 + 去重 + 追加</div>
+      </div>
+      <div class="node-arrow">→</div>
+      <div class="node-box" style="background:#FDF4DD;border-color:#BA7517;">
+        <div class="node-label">IF/ELSE</div>
+        <div class="node-name">Check Success</div>
+        <div class="node-detail">success == true ?</div>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:14px;margin:8px 0;">分支 ↓</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--success);letter-spacing:.12em;margin-bottom:6px;">IF TRUE · 订阅成功路径</div>
+        <div class="node-row">
+          <div class="node-box http">
+            <div class="node-label">HTTP · PUT</div>
+            <div class="node-name">Write to GitHub</div>
+            <div class="node-detail">提交新订阅者</div>
+          </div>
+          <div class="node-arrow">→</div>
+          <div class="node-box http">
+            <div class="node-label">HTTP</div>
+            <div class="node-name">Welcome Email</div>
+            <div class="node-detail">Resend 发送</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--danger);letter-spacing:.12em;margin-bottom:6px;">ELSE · 失败路径</div>
+        <div class="node-row">
+          <div class="node-box" style="background:#E6F1FB;border-color:#185FA5;">
+            <div class="node-label">Template</div>
+            <div class="node-name">Failure Response</div>
+            <div class="node-detail">返回错误 JSON</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow B Process Subscribers -->
+<section class="slide">
+  <div class="slide-number"><span class="num">08</span> · Workflow B · Node Detail</div>
+  <h2 class="section-title">Process Subscribers · 核心业务逻辑</h2>
+  <p class="subtitle">Workflow B 最关键的一个节点。三件事：校验、去重、生成新文件内容。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">B.3</div>
+        <div class="ndh-title">Process Subscribers</div>
+      </div>
+      <div class="ndh-type code">Code · JavaScript</div>
+    </div>
+
+    <div class="section-eyebrow">输入变量 · 重点</div>
+    <div class="var-list">
+      <div class="var-row"><div class="var-name">current_file</div><div class="var-type">String</div><div class="var-source">← Get Subscribers File / body</div></div>
+      <div class="var-row"><div class="var-name">webhook_raw</div><div class="var-type">Object</div><div class="var-source">← Webhook Trigger / _webhook_raw（整个原始请求）</div></div>
+    </div>
+    <p style="margin-top:6px;font-size:12px;color:var(--warn);">⚠ Dify 的 Webhook 不暴露 body.email 这种嵌套字段，只能拿到 _webhook_raw 整体，在代码里解构。</p>
+
+    <div class="section-eyebrow">核心逻辑</div>
+    <pre class="code-block small"><span class="kw">function</span> <span class="fn">main</span>({ current_file, webhook_raw }) {
+  <span class="com">// 从原始 webhook 数据里提取参数</span>
+  <span class="kw">const</span> body = webhook_raw.body || webhook_raw || {};
+  <span class="kw">const</span> new_email = (body.email || <span class="str">''</span>).<span class="fn">trim</span>();
+  <span class="kw">const</span> new_topics = (body.topics || <span class="str">''</span>).<span class="fn">trim</span>();
+  <span class="kw">const</span> new_frequency = (body.frequency || <span class="str">''</span>).<span class="fn">trim</span>();
+
+  <span class="com">// 解码当前文件 + 拿 SHA</span>
+  <span class="kw">const</span> fileData = <span class="fn">JSON.parse</span>(current_file);
+  <span class="kw">const</span> sha = fileData.sha;
+  <span class="kw">const</span> base64 = (fileData.content || <span class="str">''</span>).<span class="fn">replace</span>(<span class="str">/\n/g</span>, <span class="str">''</span>);
+  <span class="kw">const</span> subscribersData = <span class="fn">JSON.parse</span>(<span class="fn">Buffer.from</span>(base64, <span class="str">'base64'</span>).<span class="fn">toString</span>());
+
+  <span class="com">// 三道校验</span>
+  <span class="kw">if</span> (!<span class="str">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.<span class="fn">test</span>(new_email)) {
+    <span class="kw">return</span> { <span class="prop">success</span>: <span class="kw">false</span>, <span class="prop">message</span>: <span class="str">'邮箱格式不正确'</span>, sha };
+  }
+  <span class="kw">if</span> (![<span class="str">'daily'</span>, <span class="str">'weekly'</span>].<span class="fn">includes</span>(new_frequency)) {
+    <span class="kw">return</span> { <span class="prop">success</span>: <span class="kw">false</span>, <span class="prop">message</span>: <span class="str">'frequency 必须是 daily 或 weekly'</span>, sha };
+  }
+  <span class="kw">if</span> (subscribersData.subscribers.<span class="fn">find</span>(s => s.email === new_email)) {
+    <span class="kw">return</span> { <span class="prop">success</span>: <span class="kw">false</span>, <span class="prop">message</span>: <span class="str">'该邮箱已订阅'</span>, sha };
+  }
+
+  <span class="com">// 追加新订阅者 + 编码新内容</span>
+  subscribersData.subscribers.<span class="fn">push</span>({
+    <span class="prop">email</span>: new_email.<span class="fn">toLowerCase</span>(),
+    <span class="prop">topics</span>: new_topics.<span class="fn">split</span>(<span class="str">','</span>).<span class="fn">map</span>(t => t.<span class="fn">trim</span>()),
+    <span class="prop">frequency</span>: new_frequency,
+    <span class="prop">created_at</span>: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>().<span class="fn">split</span>(<span class="str">'T'</span>)[<span class="num">0</span>],
+    <span class="prop">active</span>: <span class="kw">true</span>
+  });
+
+  <span class="kw">const</span> newJson = <span class="fn">JSON.stringify</span>(subscribersData, <span class="kw">null</span>, <span class="num">2</span>);
+  <span class="kw">return</span> {
+    <span class="prop">success</span>: <span class="kw">true</span>,
+    <span class="prop">message</span>: <span class="str">'订阅成功'</span>,
+    <span class="prop">sha</span>: sha,
+    <span class="prop">new_content_base64</span>: <span class="fn">Buffer.from</span>(newJson).<span class="fn">toString</span>(<span class="str">'base64'</span>)
+  };
+}</pre>
+  </div>
+</section>
+
+<!-- SLIDE: Workflow B Write & Email -->
+<section class="slide">
+  <div class="slide-number"><span class="num">09</span> · Workflow B · Node Detail</div>
+  <h2 class="section-title">写回数据库 · 发欢迎邮件</h2>
+  <p class="subtitle">IF True 分支的两个 HTTP 节点。GitHub 的 PUT 是带 SHA 的乐观锁，能防止并发写入丢数据。</p>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">B.5</div>
+        <div class="ndh-title">Write to GitHub</div>
+      </div>
+      <div class="ndh-type http">HTTP · PUT</div>
+    </div>
+    <div class="ndh-purpose">把新的 subscribers.json 内容提交回仓库。每次写入会产生一个 commit。</div>
+    <table class="config-table">
+      <tr><td>Method</td><td><code>PUT</code></td></tr>
+      <tr><td>URL</td><td><code>api.github.com/repos/{owner}/{repo}/contents/subscribers.json</code></td></tr>
+      <tr><td>Headers</td><td><code>Authorization: Bearer {PAT}</code></td></tr>
+    </table>
+    <div class="section-eyebrow">Body（注意 SHA 必须正确）</div>
+    <pre class="code-block small">{
+  <span class="prop">"message"</span>: <span class="str">"Add new subscriber via Dify webhook"</span>,
+  <span class="prop">"content"</span>: <span class="str">"{{#process_subscribers.new_content_base64#}}"</span>,
+  <span class="prop">"sha"</span>: <span class="str">"{{#process_subscribers.sha#}}"</span>,
+  <span class="prop">"branch"</span>: <span class="str">"main"</span>
+}</pre>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--ink-soft);">SHA 是 GitHub Contents API 的"乐观锁"机制——如果两个请求同时写入，后到的那个 SHA 会失效，请求会被拒绝。这保证了并发安全。</p>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">B.6 · True 分支</div>
+        <div class="ndh-title">Welcome Email</div>
+      </div>
+      <div class="ndh-type http">HTTP · POST</div>
+    </div>
+    <div class="ndh-purpose">向新订阅者发一封欢迎邮件，确认订阅成功。同样的 Resend API，但邮件内容是欢迎模板。</div>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">B.7 · ELSE 分支</div>
+        <div class="ndh-title">Failure Response</div>
+      </div>
+      <div class="ndh-type tmpl">Template · Jinja2</div>
+    </div>
+    <div class="ndh-purpose">订阅失败时返回 JSON 给调用方。Jinja2 模板渲染。</div>
+    <pre class="code-block small">{<span class="str">"success"</span>: <span class="kw">false</span>, <span class="str">"message"</span>: <span class="str">"{{ error_msg }}"</span>}</pre>
+    <p style="margin-top:8px;font-size:12px;color:var(--warn);">⚠ 注意 Jinja2 用两层花括号 <code>{{ var }}</code>，不是 Dify 的节点引用语法 <code>{{#node.var#}}</code>。</p>
+  </div>
+</section>
+
+<!-- SLIDE: External Services -->
+<section class="slide">
+  <div class="slide-number"><span class="num">10</span> · External services</div>
+  <h2 class="section-title">外部服务整合</h2>
+  <p class="subtitle">Dify 之外的三个外部服务。它们补齐了 Dify 不擅长的部分：数据存储、跨域代理、邮件发送。</p>
+
+  <div class="section-divider">
+    <span class="label">Service 1</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">EXT.1</div>
+        <div class="ndh-title">GitHub Contents API · 作数据库</div>
+      </div>
+      <div class="ndh-type http">REST API</div>
+    </div>
+    <div class="ndh-purpose">为什么选 GitHub 而不是真数据库：免费、可审计（每次写入有 commit 记录）、Dify 能直接 HTTP 调用、内网友好。适合订阅者 &lt; 1000 的小规模场景。</div>
+    <table class="config-table">
+      <tr><td>认证</td><td>Personal Access Token (fine-grained)</td></tr>
+      <tr><td>读权限</td><td><code>Contents · Read</code></td></tr>
+      <tr><td>写权限</td><td><code>Contents · Read and write</code></td></tr>
+      <tr><td>过期时间</td><td>90 天（演示用），生产建议 1 年并设置提醒</td></tr>
+    </table>
+  </div>
+
+  <div class="section-divider">
+    <span class="label">Service 2</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">EXT.2</div>
+        <div class="ndh-title">Cloudflare Worker · CORS 代理</div>
+      </div>
+      <div class="ndh-type http">Edge Function</div>
+    </div>
+    <div class="ndh-purpose">为什么需要：浏览器直接 POST 到 Dify Webhook 会被 CORS 拦截。Worker 在 Cloudflare 边缘节点转发请求，加上 CORS headers。免费版 10 万请求/天。</div>
+    <pre class="code-block small"><span class="kw">const</span> CORS_HEADERS = {
+  <span class="str">'Access-Control-Allow-Origin'</span>: <span class="str">'*'</span>,
+  <span class="str">'Access-Control-Allow-Methods'</span>: <span class="str">'POST, OPTIONS'</span>,
+  <span class="str">'Access-Control-Allow-Headers'</span>: <span class="str">'Content-Type'</span>,
+};
+
+<span class="kw">export</span> <span class="kw">default</span> {
+  <span class="kw">async</span> <span class="fn">fetch</span>(request) {
+    <span class="com">// 浏览器 preflight 请求</span>
+    <span class="kw">if</span> (request.method === <span class="str">'OPTIONS'</span>)
+      <span class="kw">return</span> <span class="kw">new</span> <span class="fn">Response</span>(<span class="kw">null</span>, { <span class="prop">headers</span>: CORS_HEADERS });
+
+    <span class="com">// 转发到 Dify webhook</span>
+    <span class="kw">const</span> body = <span class="kw">await</span> request.<span class="fn">text</span>();
+    <span class="kw">const</span> r = <span class="kw">await</span> <span class="fn">fetch</span>(DIFY_WEBHOOK_URL, {
+      <span class="prop">method</span>: <span class="str">'POST'</span>,
+      <span class="prop">headers</span>: { <span class="str">'Content-Type'</span>: <span class="str">'application/json; charset=utf-8'</span> },
+      <span class="prop">body</span>: body,
+    });
+
+    <span class="kw">return</span> <span class="kw">new</span> <span class="fn">Response</span>(<span class="kw">await</span> r.<span class="fn">text</span>(), {
+      <span class="prop">status</span>: r.status,
+      <span class="prop">headers</span>: { ...CORS_HEADERS, <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+    });
+  }
+};</pre>
+  </div>
+
+  <div class="section-divider">
+    <span class="label">Service 3</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="node-detail-card">
+    <div class="node-detail-header">
+      <div>
+        <div class="ndh-num">EXT.3</div>
+        <div class="ndh-title">Resend · 邮件发送</div>
+      </div>
+      <div class="ndh-type http">REST API</div>
+    </div>
+    <div class="ndh-purpose">现代化邮件 API。POST JSON 直接发邮件。免费版 3000 封/月。验证自有域名后可以发到任意收件人。</div>
+    <table class="config-table">
+      <tr><td>Endpoint</td><td><code>POST https://api.resend.com/emails</code></td></tr>
+      <tr><td>认证</td><td><code>Authorization: Bearer {API Key}</code></td></tr>
+      <tr><td>From</td><td>未验证域名时只能用 <code>onboarding@resend.dev</code></td></tr>
+      <tr><td>速率限制</td><td>2 requests / second（Iteration 必须串行）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SLIDE: Pitfalls 1 -->
+<section class="slide">
+  <div class="slide-number"><span class="num">11</span> · Pitfalls</div>
+  <h2 class="section-title">真实踩过的坑（一）</h2>
+  <p class="subtitle">这些不会出现在任何教程里。是实际搭出来后撞了墙才知道的事。</p>
+
+  <div class="pitfall">
+    <div class="pitfall-label">⚠ Pitfall · 01 · LLM thinking 污染</div>
+    <h5>DeepSeek V4 Pro 默认开 Thinking，输出会被 &lt;think&gt; 标签包裹</h5>
+    <p>第一次 LLM 节点跑完，输出多了一大段 <code>&lt;think&gt;...&lt;/think&gt;</code> 推理过程，导致 JSON.parse 失败。token 数也飙了 4 倍、延迟 41 秒。</p>
+    <p><strong>解决</strong>：在 Model Settings 里关闭 Thinking Mode，输出立刻变干净。延迟降到 14 秒，token 数减半。这类摘要任务根本不需要 thinking。</p>
+  </div>
+
+  <div class="pitfall warn">
+    <div class="pitfall-label">⚠ Pitfall · 02 · Webhook 嵌套字段无法访问</div>
+    <h5>Dify 不让你选 _webhook_raw.body.email 这种嵌套路径</h5>
+    <p>变量选择器里只能选 <code>_webhook_raw</code>（整个 Object），无法继续展开。试图手填 <code>{{#webhook.body.email#}}</code> 也不工作。</p>
+    <p><strong>解决</strong>：在 Code 节点里接收 <code>webhook_raw</code> 整体，在代码里用 <code>webhook_raw.body.email</code> 解构。把嵌套访问的复杂度留在代码里，节点的 UI 只暴露顶层变量。</p>
+  </div>
+
+  <div class="pitfall">
+    <div class="pitfall-label">⚠ Pitfall · 03 · Iteration 内部变量绑定</div>
+    <h5>subscriber 输入绑错节点，循环全部报 Cannot read property 'email' of undefined</h5>
+    <p>在 Iteration 内部加 Code 节点时，本能地把 <code>subscriber</code> 绑定到 <code>Filter Subscribers / recipients</code>（整个数组）。结果代码拿到的是数组而不是单个对象。</p>
+    <p><strong>解决</strong>：必须绑定到 <code>Iteration / item</code>（当前迭代的元素）。这个变量在选择器里有专门的 <code>CURRENT ITERATION</code> 分组。</p>
+  </div>
+
+  <div class="pitfall warn">
+    <div class="pitfall-label">⚠ Pitfall · 04 · Iteration 错误传播策略</div>
+    <h5>第一次循环失败，整个 Iteration 就停了</h5>
+    <p>Iteration 节点默认 Error Response Method = Terminated。这意味着 5 个订阅者只要第一个发送失败（比如 Resend 限制），后面 4 个都不会发送。</p>
+    <p><strong>解决</strong>：改为 <code>Continue on Error</code>。即使部分失败，循环也会跑完所有元素。</p>
+  </div>
+</section>
+
+<!-- SLIDE: Pitfalls 2 -->
+<section class="slide">
+  <div class="slide-number"><span class="num">12</span> · Pitfalls</div>
+  <h2 class="section-title">真实踩过的坑（二）</h2>
+
+  <div class="pitfall">
+    <div class="pitfall-label">⚠ Pitfall · 05 · 浏览器 CORS 拦截</div>
+    <h5>前端 fetch 直接调 Dify Webhook，浏览器报 blocked by CORS policy</h5>
+    <p>第一次接通前端时，PowerShell 测试 webhook 都好好的，浏览器一调就挂。Dify 的 Webhook 服务器没有为前端域名设置 CORS headers。</p>
+    <p><strong>解决</strong>：用 Cloudflare Worker 做代理。10 行 JS 代码：接收前端请求 → 加 CORS headers → 转发到 Dify。同样适用于任何"前端 → 第三方 API"被 CORS 拦截的场景。</p>
+  </div>
+
+  <div class="pitfall warn">
+    <div class="pitfall-label">⚠ Pitfall · 06 · Resend 免费版收件人限制</div>
+    <h5>未验证域名时，只能发到注册账号的那个邮箱</h5>
+    <p>测试发到其他邮箱时 Resend 返回 403 + <code>"You can only send testing emails to your own email address..."</code>。这是 Resend 的反垃圾策略。</p>
+    <p><strong>解决方案 A</strong>：买个域名（.xyz 约 ¥10/年），在 Resend 添加 + 配置 DNS records 后即可发到任意邮箱。</p>
+    <p><strong>解决方案 B</strong>：搬到公司 Dify，用公司邮件服务发，绕过 Resend。</p>
+  </div>
+
+  <div class="pitfall">
+    <div class="pitfall-label">⚠ Pitfall · 07 · PowerShell 的 curl 不是 curl</div>
+    <h5>测试时输入 curl 命令报 ParameterBindingException</h5>
+    <p>在 PowerShell 里 <code>curl</code> 是 <code>Invoke-WebRequest</code> 的别名，参数语法跟 Unix 的 curl 完全不同。直接复制 Linux curl 命令会报错。</p>
+    <p><strong>解决</strong>：用 PowerShell 原生的 <code>Invoke-RestMethod</code>，配合 UTF-8 编码处理中文 body：</p>
+    <pre class="code-block small">$body = @{ email=<span class="str">"test@x.com"</span>; topics=<span class="str">"AI产品"</span> } | <span class="fn">ConvertTo-Json</span>
+<span class="fn">Invoke-RestMethod</span> -Uri $url -Method POST `
+  -ContentType <span class="str">"application/json; charset=utf-8"</span> `
+  -Body ([System.Text.Encoding]::UTF8.<span class="fn">GetBytes</span>($body))</pre>
+  </div>
+
+  <div class="pitfall warn">
+    <div class="pitfall-label">⚠ Pitfall · 08 · Schedule Trigger Test Run 是监听模式</div>
+    <h5>点 Test Run 后 Workflow 一直 Listening 不执行</h5>
+    <p>Schedule Trigger 的 Test Run 不像普通节点那样立刻跑，而是进入"监听模式"等定时器自然触发。如果时间没到，会一直等。</p>
+    <p><strong>解决</strong>：暂时把 Schedule 改到当前时间后 1-2 分钟，让定时器很快自然触发；或者部分 Dify 版本支持右键节点 "Run from here"。</p>
+  </div>
+</section>
+
+<!-- SLIDE: Migration to Company Dify -->
+<section class="slide">
+  <div class="slide-number"><span class="num">13</span> · Migration</div>
+  <h2 class="section-title">搬迁到公司 Dify</h2>
+  <p class="subtitle">从个人 Dify Cloud 搬到公司部署的 Dify，比想象中简单。DSL 导出导入保留了所有节点、变量、Prompt、代码。</p>
+
+  <div class="steps">
+    <div class="step-item">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h5>个人 Dify Cloud · Export DSL</h5>
+        <p>打开 Workflow → 右上角 ⋯ 菜单 → <code>Export DSL</code>。会下载一个 <code>.yml</code> 文件，包含整个 Workflow 的完整定义。</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h5>公司 Dify · Import DSL</h5>
+        <p>Studio 首页 → <code>Import DSL file</code> → 上传 .yml。Workflow 立即创建好，所有节点、连线、变量绑定、代码、Prompt 全部还原。</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h5>重新配置敏感凭证</h5>
+        <p>不会自动迁移的部分（这是合理的安全设计）：LLM API Key、Resend API Key、GitHub PAT。重新填入即可。</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h5>切换邮件方案 · 用公司域名发件</h5>
+        <p>公司 Dify 部署在内网，可以用公司 SMTP 服务器或公司域名验证过的 Resend 账号发件。<strong>这是搬迁最大的价值</strong>——邮件能真正发到任意公司同事邮箱。</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h5>Publish · 等待第一次定时触发</h5>
+        <p>记得点 Publish 按钮（而不是只 Save）。Schedule Trigger 必须 publish 才会真正按时触发。第一次定时跑成功 = 整个系统真的上线了。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE: Skills & Lessons -->
+<section class="slide">
+  <div class="slide-number"><span class="num">14</span> · Skills · Lessons</div>
+  <h2 class="section-title">这套技术栈学到的事</h2>
+  <p class="subtitle">不是教程能教的事。是搭完一个真实产品后沉淀下来的判断。</p>
+
+  <div class="two-col">
+    <div>
+      <div class="col-eyebrow">关于 Dify 的能力边界</div>
+      <h4 class="col-h">能干 / 不能干</h4>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;">Dify 擅长的是"短任务编排"：HTTP 调用、LLM 推理、条件判断、循环、数据转换。每个节点跑几秒到几十秒。</p>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin-top:10px;">不擅长的是"长任务"——比如训练一个模型，或者运行一个 24 小时不停的爬虫。Dify 是事件驱动的，不是 daemon。</p>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin-top:10px;">这恰好覆盖了 80% 的"自动化 + AI"场景。</p>
+    </div>
+
+    <div>
+      <div class="col-eyebrow">关于"GitHub 当数据库"</div>
+      <h4 class="col-h">非传统但好用</h4>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;">把 subscribers.json 放仓库里听起来不专业，但实际上：免费、可审计（每次写入有 commit）、无需运维、对小规模场景完全够用。</p>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin-top:10px;">订阅者超过 1000 / 写入频率超过每秒 1 次时再迁数据库。在那之前，这是最快的方案。</p>
+    </div>
+
+    <div style="margin-top:32px;">
+      <div class="col-eyebrow">关于自然语言生成代码</div>
+      <h4 class="col-h">瓶颈不是 AI 能力</h4>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;">Vibe Coding 已经足够好。让 AI 写 React 组件、写 Worker 代码、写 Code 节点的逻辑，都不是问题。</p>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin-top:10px;">真正的瓶颈是写出有判断力的设计 spec。Prompt 的精度决定了产出的精度。</p>
+    </div>
+
+    <div style="margin-top:32px;">
+      <div class="col-eyebrow">关于这套架构的可复用性</div>
+      <h4 class="col-h">模板已经在了</h4>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;">"定时抓数据 → AI 处理 → 写数据库 → 循环通知"是个万能模板。把 follow-builders 换成任何 RSS / API，把"发邮件"换成"发钉钉/企微/Slack"，整个 Workflow 几乎不用改。</p>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin-top:10px;">这一周搭的不是一个产品，是一个工厂。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Closing -->
+<section class="slide" style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:calc(100vh - 50px);">
+  <div class="slide-number"><span class="num">END</span></div>
+  <h2 style="font-family:'Newsreader',serif;font-style:italic;font-size:64px;line-height:1.1;color:var(--ink);max-width:880px;margin-bottom:32px;letter-spacing:-.02em;">
+    一份 Workflow 写好了，<br>
+    <span style="color:var(--accent);">可以做的事就远不止这一件。</span>
+  </h2>
+  <p style="font-size:18px;color:var(--ink-soft);max-width:680px;line-height:1.7;margin-bottom:24px;">
+    这套技术栈、这些踩坑经验、这些可复用的代码片段，
+    都是接下来做任何"AI + 自动化"项目时可以直接拿来用的资产。
+  </p>
+  <p style="font-size:18px;color:var(--ink-soft);max-width:680px;line-height:1.7;">
+    欢迎认领下一个 use case。
+  </p>
+  <div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--ink);width:100%;display:flex;gap:48px;flex-wrap:wrap;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">DSL Export</div>
+      <div style="font-size:14px;">两个 Workflow 已导出，可一键导入</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Code Snippets</div>
+      <div style="font-size:14px;">所有 Code 节点源码已整理</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">Q &amp; A</div>
+      <div style="font-size:14px;">现场提问 · 或会后单独聊</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

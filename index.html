@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #bc5a33;
+      --ink: #1c1914;
+      --paper: #f4f0e8;
+      --rule: #c8c2b4;
+      --muted: #8c7f6e;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 56px;
+    }
+
+    /* ── Header ── */
+    header { padding: 44px 0 0; }
+
+    .site-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 36px;
+    }
+
+    .site-label::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 56px;
+      padding-bottom: 52px;
+    }
+
+    h1 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(54px, 10vw, 104px);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .hero-desc {
+      flex-shrink: 0;
+      max-width: 300px;
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 300;
+      font-size: clamp(15px, 1.6vw, 17px);
+      line-height: 1.7;
+      color: var(--accent);
+      padding-bottom: 6px;
+    }
+
+    /* ── Rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+    }
+
+    /* ── Projects ── */
+    main { padding: 0 0 96px; }
+
+    .project {
+      display: grid;
+      grid-template-columns: 88px 1fr auto;
+      align-items: start;
+      gap: 0 40px;
+      padding: 44px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .project-num {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      padding-top: 2px;
+    }
+
+    .project-body { min-width: 0; }
+
+    .project-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .project-name-en {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .project-name-zh {
+      font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+      font-size: clamp(26px, 3.2vw, 38px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--accent);
+      max-width: 420px;
+    }
+
+    /* ── Buttons ── */
+    .project-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+      padding-top: 6px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding: 11px 18px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13.5px;
+      letter-spacing: 0;
+      min-width: 152px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .btn:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+
+    .btn-arrow {
+      color: var(--accent);
+      font-size: 15px;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .btn:hover .btn-arrow { color: var(--paper); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 20px 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 680px) {
+      .container { padding: 0 24px; }
+      .hero { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .hero-desc { max-width: 100%; }
+      .project { grid-template-columns: 60px 1fr; gap: 0 24px; }
+      .project-links {
+        grid-column: 2;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .btn { min-width: 130px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="site-label">Personal Demo Collection</div>
+      <div class="hero">
+        <h1>Demo<br>Hub</h1>
+        <p class="hero-desc">汇总不同主题的交互演示与培训材料。点击进入各项目的 Overview 与 Deep Dive 页面。</p>
+      </div>
+    </header>
+
+    <hr>
+
+    <main>
+
+      <!-- 01 Dify Training -->
+      <div class="project">
+        <div class="project-num">01</div>
+        <div class="project-body">
+          <div class="project-tag">AI &nbsp;·&nbsp; 培训</div>
+          <div class="project-name-en">Dify Training</div>
+          <p class="project-desc">Dify 平台的培训材料，涵盖功能概览与深度解析。</p>
+        </div>
+        <div class="project-links">
+          <a class="btn" href="dify-training/overview.html">Overview <span class="btn-arrow">↗</span></a>
+          <a class="btn" href="dify-training/deep-dive.html">Deep Dive <span class="btn-arrow">↗</span></a>
+        </div>
+      </div>
+
+      <!-- 02 AI Newsletter -->
+      <div class="project">
+        <div class="project-num">02</div>
+        <div class="project-body">
+          <div class="project-tag">AI &nbsp;·&nbsp; 项目案例</div>
+          <div class="project-name-zh">AI 咨询聚合邮件订阅系统</div>
+          <p class="project-desc">基于 Dify 等工具构建的 Follow Builders AI 资讯聚合与邮件推送系统。</p>
+        </div>
+        <div class="project-links">
+          <a class="btn" href="ai-newsletter/overview.html">Overview <span class="btn-arrow">↗</span></a>
+          <a class="btn" href="ai-newsletter/deep-dive.html">Deep Dive <span class="btn-arrow">↗</span></a>
+        </div>
+      </div>
+
+      <!--
+        新增项目时，复制以下模板，填入内容：
+
+        <div class="project">
+          <div class="project-num">03</div>
+          <div class="project-body">
+            <div class="project-tag">分类 &nbsp;·&nbsp; 标签</div>
+            <div class="project-name-en">English Project Name</div>
+            <!-- 中文项目名用 project-name-zh -->
+            <p class="project-desc">项目简短描述。</p>
+          </div>
+          <div class="project-links">
+            <a class="btn" href="folder-name/overview.html">Overview <span class="btn-arrow">↗</span></a>
+            <a class="btn" href="folder-name/deep-dive.html">Deep Dive <span class="btn-arrow">↗</span></a>
+          </div>
+        </div>
+      -->
+
+    </main>
+
+    <footer>
+      <span class="footer-text">02 Projects</span>
+      <span class="footer-text">Demo Hub</span>
+    </footer>
+
+  </div>
+</body>
+</html>

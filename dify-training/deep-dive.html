@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dify 功能模块深度指南 · AI学习小组</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;600;700&display=swap');
 
   :root {
-    --ink: #1a1a2e;
-    --ink-light: #4a4a6a;
-    --ink-faint: #8888aa;
-    --bg: #f8f7ff;
-    --surface: #ffffff;
-    --accent: #6C5CE7;
-    --accent-2: #00CECA;
-    --accent-3: #FF7675;
-    --accent-4: #FDCB6E;
-    --border: #e8e6f0;
-    --gradient: linear-gradient(135deg, #6C5CE7 0%, #00CECA 100%);
+    --ink: #1c1914;
+    --ink-light: #5a5347;
+    --ink-faint: #8c7f6e;
+    --bg: #f4f0e8;
+    --surface: #faf8f2;
+    --accent: #bc5a33;
+    --accent-2: #7e8a4f;
+    --accent-3: #c2705a;
+    --accent-4: #c08a3e;
+    --border: #d8d2c4;
+    --gradient: linear-gradient(135deg, #bc5a33 0%, #a14b28 100%);
 
-    --m1: #6C5CE7;   /* 聊天助手 紫 */
-    --m2: #00b894;   /* 知识库   绿 */
-    --m3: #e17055;   /* 工作流   橙 */
-    --m4: #0984e3;   /* 智能体   蓝 */
+    --m1: #bc5a33;   /* 聊天助手 紫 */
+    --m2: #6f7d3f;   /* 知识库   绿 */
+    --m3: #bf6a3a;   /* 工作流   橙 */
+    --m4: #4f7a82;   /* 智能体   蓝 */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,32 +36,31 @@
     font-size: 15px;
   }
 
-  /* ── HERO ── */
+  /* ── HERO (方案 C · 描边卡片) ── */
   .hero {
-    background: var(--gradient);
-    color: white;
-    padding: 60px 40px 48px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 40px 40px;
   }
-  .hero::before {
-    content: ''; position: absolute;
-    top: -50px; right: -50px;
-    width: 260px; height: 260px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
+  .hero-inner {
+    border: 1.5px solid var(--accent);
+    border-radius: 4px;
+    padding: 52px 48px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
   }
   .hero-badge {
     display: inline-block;
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 4px 16px; border-radius: 20px;
-    font-size: 13px; letter-spacing: 0.08em; margin-bottom: 16px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent-deep, #9e4827);
+    padding: 5px 14px; border-radius: 40px;
+    font-size: 13px; letter-spacing: 0.08em; margin-bottom: 22px;
   }
-  .hero h1 { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; line-height: 1.2; }
-  .hero .subtitle { font-size: 16px; opacity: 0.85; max-width: 520px; margin: 0 auto 28px; font-weight: 300; }
-  .hero-meta { display: flex; justify-content: center; gap: 24px; font-size: 13px; opacity: 0.7; }
+  .hero h1 { font-size: 46px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 14px; line-height: 1.16; color: var(--ink); }
+  .hero .subtitle { font-size: 17px; color: var(--ink-light); max-width: 520px; margin: 0 auto 28px; font-weight: 300; }
+  .hero-meta { display: flex; justify-content: center; gap: 24px; font-size: 13px; color: var(--ink-faint); }
 
   /* ── LAYOUT ── */
   .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
@@ -105,10 +104,10 @@
     color: white;
     display: flex; align-items: center; gap: 16px;
   }
-  .mh-1 { background: linear-gradient(135deg, #6C5CE7, #a29bfe); }
-  .mh-2 { background: linear-gradient(135deg, #00b894, #55efc4); }
-  .mh-3 { background: linear-gradient(135deg, #e17055, #fdcb6e); }
-  .mh-4 { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+  .mh-1 { background: linear-gradient(135deg, #bc5a33, #d99a7a); }
+  .mh-2 { background: linear-gradient(135deg, #6f7d3f, #aab86f); }
+  .mh-3 { background: linear-gradient(135deg, #bf6a3a, #c08a3e); }
+  .mh-4 { background: linear-gradient(135deg, #4f7a82, #8fb0b5); }
 
   .module-header-icon { font-size: 40px; flex-shrink: 0; }
   .module-header-text h2 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
@@ -162,7 +161,7 @@
   .step-content p { font-size: 14px; color: var(--ink-light); margin: 0; }
   .step-content .code-hint {
     background: var(--ink);
-    color: #a29bfe;
+    color: #d99a7a;
     font-family: monospace;
     font-size: 13px;
     padding: 8px 14px;
@@ -193,7 +192,7 @@
     overflow: hidden;
   }
   .sc-topbar {
-    background: #f4f4f8;
+    background: #efe9dd;
     padding: 10px 16px;
     font-size: 12px;
     color: var(--ink-faint);
@@ -215,7 +214,7 @@
   }
   .bubble-ai {
     align-self: flex-start;
-    background: #f0eeff;
+    background: #f3ece1;
     color: var(--ink-light);
     border-radius: 14px 14px 14px 4px;
     padding: 10px 14px;
@@ -236,8 +235,8 @@
 
   /* workflow canvas */
   .wf-canvas {
-    background: #fafafa;
-    border: 1px dashed #ccc;
+    background: #f1ece1;
+    border: 1px dashed #c8c2b4;
     border-radius: 10px;
     padding: 16px;
     min-height: 120px;
@@ -262,7 +261,7 @@
   .wf-node .n-label { font-weight: 600; color: var(--ink); font-size: 12px; }
   .wf-node .n-type { font-size: 10px; color: var(--ink-faint); margin-top: 2px; }
   .wf-node.active { border-color: var(--m3); box-shadow: 0 0 0 3px rgba(225,112,85,0.15); }
-  .wf-arrow { color: #aaa; font-size: 16px; padding: 0 6px; flex-shrink: 0; }
+  .wf-arrow { color: #8c7f6e; font-size: 16px; padding: 0 6px; flex-shrink: 0; }
   .wf-branch {
     display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
   }
@@ -285,9 +284,9 @@
     border-radius: 10px; padding: 14px 18px;
     font-size: 14px; display: flex; gap: 10px; margin: 14px 0;
   }
-  .tip-yellow { background: #fffce8; border: 1px solid #fde68a; color: #78350f; }
-  .tip-blue { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
-  .tip-green { background: #f0fdf4; border: 1px solid #bbf7d0; color: #14532d; }
+  .tip-yellow { background: #f5ecdb; border: 1px solid #e0c98a; color: #6a4420; }
+  .tip-blue { background: #e9efed; border: 1px solid #c3d4d2; color: #3f6168; }
+  .tip-green { background: #eef1e3; border: 1px solid #cdd6ab; color: #47521f; }
   .tip-icon { flex-shrink: 0; font-size: 17px; }
 
   /* ── COMPARISON GRID ── */
@@ -371,10 +370,10 @@
     display: inline-block; padding: 2px 10px;
     border-radius: 20px; font-size: 12px; font-weight: 600; vertical-align: middle;
   }
-  .badge-m1 { background: #ede9ff; color: var(--m1); }
-  .badge-m2 { background: #d1fae5; color: #065f46; }
-  .badge-m3 { background: #ffedd5; color: #9a3412; }
-  .badge-m4 { background: #dbeafe; color: #1e40af; }
+  .badge-m1 { background: #f3e4dc; color: var(--m1); }
+  .badge-m2 { background: #e7ead2; color: #4a5226; }
+  .badge-m3 { background: #f1e4d2; color: #8a3f22; }
+  .badge-m4 { background: #dbe5e3; color: #3f6168; }
 
   @media (max-width: 640px) {
     .mod-nav { grid-template-columns: repeat(2,1fr); }
@@ -383,12 +382,19 @@
     .module-body { padding: 24px 20px; }
     .hero h1 { font-size: 26px; }
   }
+
+  /* ── index-style overrides ── */
+  h1, h2, h3, .footer-logo { font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif; letter-spacing: -0.02em; }
+  .hero-badge { font-family: 'IBM Plex Mono', monospace; }
+  .module-card, .concept, .screen-wrap, .screen-content, .wf-canvas, .wf-node, .cmp-card, .col-box, .node-card, .tool-card, .tip { border-radius: 4px; }
+  .mod-nav a:hover { box-shadow: 0 4px 16px rgba(28,25,20,0.10); }
 </style>
 </head>
 <body>
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
+  <div class="hero-inner">
   <div class="hero-badge">AI 学习小组 · 模块深度指南（第二篇）</div>
   <h1>🔬 Dify 四大核心模块详解</h1>
   <p class="subtitle">聊天助手、知识库、工作流、AI 智能体——从概念到动手搭建</p>
@@ -396,6 +402,7 @@
     <span>📖 约 20 分钟阅读</span>
     <span>🛠️ 含搭建步骤</span>
     <span>💡 含真实案例</span>
+  </div>
   </div>
 </div>
 
@@ -459,9 +466,9 @@
       <div class="steps-title">🖥️ 实际效果长这样</div>
       <div class="screen-wrap">
         <div class="screen-bar">
-          <div class="screen-dot" style="background:#ff5f57"></div>
-          <div class="screen-dot" style="background:#febc2e"></div>
-          <div class="screen-dot" style="background:#28c840"></div>
+          <div class="screen-dot" style="background:#c2705a"></div>
+          <div class="screen-dot" style="background:#c08a3e"></div>
+          <div class="screen-dot" style="background:#7e8a4f"></div>
         </div>
         <div class="screen-content">
           <div class="sc-topbar">💬 HR 小助手 · 在线</div>
@@ -646,14 +653,14 @@
       <div class="steps-title">🖥️ 知识库召回测试界面示例</div>
       <div class="screen-wrap">
         <div class="screen-bar">
-          <div class="screen-dot" style="background:#ff5f57"></div>
-          <div class="screen-dot" style="background:#febc2e"></div>
-          <div class="screen-dot" style="background:#28c840"></div>
+          <div class="screen-dot" style="background:#c2705a"></div>
+          <div class="screen-dot" style="background:#c08a3e"></div>
+          <div class="screen-dot" style="background:#7e8a4f"></div>
         </div>
         <div class="screen-content">
           <div class="sc-topbar">📚 知识库 · 召回测试</div>
           <div class="sc-body">
-            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 14px; font-size:13px; color:#166534; margin-bottom:12px;">
+            <div style="background:#eef1e3; border:1px solid #cdd6ab; border-radius:8px; padding:10px 14px; font-size:13px; color:#47521f; margin-bottom:12px;">
               🔍 测试问题：「员工生育假有多少天？」
             </div>
             <div style="font-size:12px; color:var(--ink-faint); margin-bottom:8px;">检索到 3 个相关段落（得分从高到低）：</div>
@@ -663,7 +670,7 @@
                 「…女性员工产假为 98 天，其中产前可休 15 天。难产的，增加产假 15 天……男性员工陪产假为 7 个工作日…」
               </div>
               <div style="background:white; border:1px solid var(--border); border-radius:8px; padding:10px; font-size:12px; color:var(--ink-light);">
-                <div style="font-weight:700; color:#86efac; margin-bottom:4px;">📄 假期申请流程.docx · 第3页 · 相关度 0.78</div>
+                <div style="font-weight:700; color:#aab873; margin-bottom:4px;">📄 假期申请流程.docx · 第3页 · 相关度 0.78</div>
                 「…生育假申请需提前 30 天通知 HR，并提交医院证明文件…」
               </div>
             </div>
@@ -757,9 +764,9 @@
 
       <div class="screen-wrap">
         <div class="screen-bar">
-          <div class="screen-dot" style="background:#ff5f57"></div>
-          <div class="screen-dot" style="background:#febc2e"></div>
-          <div class="screen-dot" style="background:#28c840"></div>
+          <div class="screen-dot" style="background:#c2705a"></div>
+          <div class="screen-dot" style="background:#c08a3e"></div>
+          <div class="screen-dot" style="background:#7e8a4f"></div>
         </div>
         <div class="screen-content">
           <div class="sc-topbar">🔗 工作流画布 · 邮件处理助手</div>
@@ -786,13 +793,13 @@
               <div class="wf-arrow">→</div>
               <div class="wf-branch">
                 <div class="wf-branch-label">投诉类</div>
-                <div class="wf-node" style="background:#fff0f0;">
+                <div class="wf-node" style="background:#f3e6e0;">
                   <span class="n-icon">😤</span>
                   <div class="n-label">投诉回复</div>
                   <div class="n-type">LLM 节点</div>
                 </div>
                 <div class="wf-branch-label">咨询类</div>
-                <div class="wf-node" style="background:#f0fdf4;">
+                <div class="wf-node" style="background:#eef1e3;">
                   <span class="n-icon">💡</span>
                   <div class="n-label">知识库查询</div>
                   <div class="n-type">检索节点</div>
@@ -976,30 +983,30 @@
       <p style="font-size:14px; color:var(--ink-light); margin-bottom:14px;">你输入「帮我调研竞争对手A公司最新的产品发布情况」，智能体会自主执行以下步骤：</p>
 
       <div style="border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:16px;">
-        <div style="background:#f0f4ff; padding:12px 18px; font-size:13px; color:#1e3a8a; font-weight:600; border-bottom:1px solid var(--border);">
+        <div style="background:#e9efed; padding:12px 18px; font-size:13px; color:#3f6168; font-weight:600; border-bottom:1px solid var(--border);">
           🤖 智能体思考过程（可见面板）
         </div>
         <div style="padding:16px 18px;">
           <div style="display:flex; flex-direction:column; gap:10px;">
             <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
-              <span style="background:#dbeafe; color:#1e40af; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第1步</span>
+              <span style="background:#dbe5e3; color:#3f6168; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第1步</span>
               <span style="color:var(--ink-light);">🔍 使用「网络搜索」工具 → 搜索「A公司 新产品 2025」</span>
             </div>
             <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
-              <span style="background:#dbeafe; color:#1e40af; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第2步</span>
+              <span style="background:#dbe5e3; color:#3f6168; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第2步</span>
               <span style="color:var(--ink-light);">🌐 打开搜索结果中的3个相关网页，提取产品信息</span>
             </div>
             <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
-              <span style="background:#dbeafe; color:#1e40af; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第3步</span>
+              <span style="background:#dbe5e3; color:#3f6168; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第3步</span>
               <span style="color:var(--ink-light);">📚 查询内部知识库 → 对比我方产品差异</span>
             </div>
             <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
-              <span style="background:#dbeafe; color:#1e40af; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第4步</span>
+              <span style="background:#dbe5e3; color:#3f6168; border-radius:6px; padding:2px 8px; font-weight:700; flex-shrink:0; font-size:11px;">第4步</span>
               <span style="color:var(--ink-light);">📝 综合以上信息，生成结构化竞品分析报告</span>
             </div>
           </div>
         </div>
-        <div style="background:#f0fdf4; padding:12px 18px; border-top:1px solid var(--border); font-size:13px; color:#166534;">
+        <div style="background:#eef1e3; padding:12px 18px; border-top:1px solid var(--border); font-size:13px; color:#47521f;">
           ✅ 任务完成！输出：一份含产品特性对比、定价分析、市场影响的调研报告
         </div>
       </div>
@@ -1082,10 +1089,10 @@
         <thead>
           <tr>
             <th style="background:var(--gradient); color:white; padding:12px 14px; text-align:left; border-radius:12px 0 0 0; font-size:12px;">对比维度</th>
-            <th style="background:linear-gradient(135deg,#6C5CE7,#a29bfe); color:white; padding:12px 14px; text-align:left;">💬 聊天助手</th>
-            <th style="background:linear-gradient(135deg,#00b894,#55efc4); color:white; padding:12px 14px; text-align:left;">📚 知识库</th>
-            <th style="background:linear-gradient(135deg,#e17055,#fdcb6e); color:white; padding:12px 14px; text-align:left;">🔗 工作流</th>
-            <th style="background:linear-gradient(135deg,#0984e3,#74b9ff); color:white; padding:12px 14px; text-align:left; border-radius:0 12px 0 0;">🤖 智能体</th>
+            <th style="background:linear-gradient(135deg,#bc5a33,#d99a7a); color:white; padding:12px 14px; text-align:left;">💬 聊天助手</th>
+            <th style="background:linear-gradient(135deg,#6f7d3f,#aab86f); color:white; padding:12px 14px; text-align:left;">📚 知识库</th>
+            <th style="background:linear-gradient(135deg,#bf6a3a,#c08a3e); color:white; padding:12px 14px; text-align:left;">🔗 工作流</th>
+            <th style="background:linear-gradient(135deg,#4f7a82,#8fb0b5); color:white; padding:12px 14px; text-align:left; border-radius:0 12px 0 0;">🤖 智能体</th>
           </tr>
         </thead>
         <tbody>
@@ -1128,7 +1135,7 @@
       </table>
     </div>
 
-    <div style="margin-top:20px; background:linear-gradient(135deg,#f0eeff,#e8fdfb); border-radius:12px; padding:18px 20px;">
+    <div style="margin-top:20px; background:linear-gradient(135deg,#f3ece1,#eef0e2); border-radius:12px; padding:18px 20px;">
       <div style="font-weight:700; margin-bottom:8px; color:var(--ink);">🗺️ 推荐学习路径</div>
       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:14px; color:var(--ink-light);">
         <span style="background:var(--m1); color:white; padding:4px 14px; border-radius:20px; font-size:13px;">①建知识库</span>

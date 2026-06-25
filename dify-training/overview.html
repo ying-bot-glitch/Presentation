@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dify 入门学习手册 · AI学习小组</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;600;700&display=swap');
 
   :root {
-    --ink: #1a1a2e;
-    --ink-light: #4a4a6a;
-    --ink-faint: #8888aa;
-    --bg: #f8f7ff;
-    --surface: #ffffff;
-    --accent: #6C5CE7;
-    --accent-2: #00CECA;
-    --accent-3: #FF7675;
-    --accent-4: #FDCB6E;
-    --border: #e8e6f0;
-    --gradient: linear-gradient(135deg, #6C5CE7 0%, #00CECA 100%);
+    --ink: #1c1914;
+    --ink-light: #5a5347;
+    --ink-faint: #8c7f6e;
+    --bg: #f4f0e8;
+    --surface: #faf8f2;
+    --accent: #bc5a33;
+    --accent-2: #7e8a4f;
+    --accent-3: #c2705a;
+    --accent-4: #c08a3e;
+    --border: #d8d2c4;
+    --gradient: linear-gradient(135deg, #bc5a33 0%, #a14b28 100%);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,53 +31,44 @@
     font-size: 15px;
   }
 
-  /* ─── HERO ─── */
+  /* ─── HERO (方案 C · 描边卡片) ─── */
   .hero {
-    background: var(--gradient);
-    color: white;
-    padding: 72px 40px 56px;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 40px 40px;
+  }
+  .hero-inner {
+    border: 1.5px solid var(--accent);
+    border-radius: 4px;
+    padding: 56px 48px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -80px; left: -40px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.05);
+    max-width: 860px;
+    margin: 0 auto;
   }
   .hero-badge {
     display: inline-block;
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 4px 16px;
-    border-radius: 20px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent-deep, #9e4827);
+    padding: 5px 14px;
+    border-radius: 40px;
     font-size: 13px;
     letter-spacing: 0.08em;
-    margin-bottom: 20px;
+    margin-bottom: 26px;
   }
   .hero h1 {
-    font-size: 42px;
+    font-size: 50px;
     font-weight: 700;
     letter-spacing: -0.02em;
-    margin-bottom: 12px;
-    line-height: 1.2;
+    margin-bottom: 16px;
+    line-height: 1.14;
+    color: var(--ink);
   }
   .hero .subtitle {
-    font-size: 17px;
-    opacity: 0.85;
-    max-width: 500px;
-    margin: 0 auto 32px;
+    font-size: 18px;
+    color: var(--ink-light);
+    max-width: 480px;
+    margin: 0 auto 28px;
     font-weight: 300;
   }
   .hero-meta {
@@ -85,7 +76,7 @@
     justify-content: center;
     gap: 24px;
     font-size: 13px;
-    opacity: 0.7;
+    color: var(--ink-faint);
   }
   .hero-meta span { display: flex; align-items: center; gap: 5px; }
 
@@ -167,8 +158,8 @@
 
   /* ─── ANALOGY BOX ─── */
   .analogy {
-    background: linear-gradient(135deg, #f0eeff, #e8fdfb);
-    border: 1px solid #d4cfff;
+    background: linear-gradient(135deg, #f3ece1, #eef0e2);
+    border: 1px solid #e3d8c6;
     border-radius: 14px;
     padding: 24px 28px;
     margin: 20px 0;
@@ -195,18 +186,18 @@
     overflow: hidden;
     transition: transform 0.15s, box-shadow 0.15s;
   }
-  .module-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,92,231,0.1); }
+  .module-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(188,90,51,0.12); }
   .module-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
   }
-  .card-blue::before { background: linear-gradient(90deg, #6C5CE7, #a29bfe); }
-  .card-teal::before { background: linear-gradient(90deg, #00CECA, #55efc4); }
-  .card-orange::before { background: linear-gradient(90deg, #FDCB6E, #ffeaa7); }
-  .card-pink::before { background: linear-gradient(90deg, #FF7675, #fab1a0); }
-  .card-green::before { background: linear-gradient(90deg, #00b894, #55efc4); }
+  .card-blue::before { background: linear-gradient(90deg, #bc5a33, #d99a7a); }
+  .card-teal::before { background: linear-gradient(90deg, #7e8a4f, #aab86f); }
+  .card-orange::before { background: linear-gradient(90deg, #c08a3e, #ffeaa7); }
+  .card-pink::before { background: linear-gradient(90deg, #c2705a, #d9a78f); }
+  .card-green::before { background: linear-gradient(90deg, #6f7d3f, #aab86f); }
 
   .module-icon { font-size: 32px; margin-bottom: 12px; }
   .module-name { font-weight: 700; font-size: 16px; margin-bottom: 8px; color: var(--ink); }
@@ -237,9 +228,9 @@
     font-weight: 600;
     font-size: 16px;
   }
-  .uc-purple { background: linear-gradient(135deg, #f0eeff, #e8fdfb); }
-  .uc-teal { background: linear-gradient(135deg, #e8fdfb, #f0fff8); }
-  .uc-orange { background: linear-gradient(135deg, #fff9ee, #fff5e6); }
+  .uc-purple { background: linear-gradient(135deg, #f3ece1, #eef0e2); }
+  .uc-teal { background: linear-gradient(135deg, #eef0e2, #f1f2e8); }
+  .uc-orange { background: linear-gradient(135deg, #f5ecdb, #f5ecdb); }
   .usecase-body { padding: 20px 24px; }
   .usecase-body p { font-size: 14px; color: var(--ink-light); margin-bottom: 12px; }
 
@@ -288,12 +279,12 @@
 
   /* ─── TIP BOX ─── */
   .tip {
-    background: #fff9ee;
-    border: 1px solid #fde68a;
+    background: #f5ecdb;
+    border: 1px solid #e0c98a;
     border-radius: 12px;
     padding: 16px 20px;
     font-size: 14px;
-    color: #78350f;
+    color: #6a4420;
     display: flex;
     gap: 10px;
     margin: 16px 0;
@@ -316,8 +307,8 @@
   .compare-table tr:last-child td:first-child { border-radius: 0 0 0 12px; }
   .compare-table tr:last-child td:last-child { border-radius: 0 0 12px 0; }
   .compare-table tr:hover td { background: var(--bg); }
-  .check { color: #00b894; font-weight: 700; }
-  .cross { color: #d63031; }
+  .check { color: #6f7d3f; font-weight: 700; }
+  .cross { color: #a8472f; }
 
   /* ─── DIAGRAM ─── */
   .diagram-wrap {
@@ -356,9 +347,9 @@
     font-weight: 600;
     vertical-align: middle;
   }
-  .badge-purple { background: #ede9ff; color: #6C5CE7; }
-  .badge-teal { background: #e0fafa; color: #00a8a6; }
-  .badge-orange { background: #fff3da; color: #c0830c; }
+  .badge-purple { background: #f3e4dc; color: #bc5a33; }
+  .badge-teal { background: #eef0e2; color: #6f7d3f; }
+  .badge-orange { background: #f1e4d2; color: #9a6a2a; }
 
   /* ─── SVG DIAGRAM ─── */
   .arch-svg { width: 100%; max-width: 700px; height: auto; }
@@ -369,12 +360,19 @@
     .flow { flex-direction: column; }
     .flow-arrow { transform: rotate(90deg); }
   }
+
+  /* ── index-style overrides ── */
+  h1, h2, h3, .footer-logo, .module-name { font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif; letter-spacing: -0.02em; }
+  .section-label, .toc-title, .hero-badge { font-family: 'IBM Plex Mono', monospace; }
+  .toc, .section, .module-card, .usecase, .diagram-wrap, .analogy { border-radius: 4px; }
+  .module-card:hover { transform: none; box-shadow: 0 4px 16px rgba(28,25,20,0.06); }
 </style>
 </head>
 <body>
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
+  <div class="hero-inner">
   <div class="hero-badge">AI 学习小组 · 内部培训材料</div>
   <h1>🤖 Dify 入门手册</h1>
   <p class="subtitle">零技术背景，轻松搭建属于你的 AI 应用</p>
@@ -382,6 +380,7 @@
     <span>📖 约 15 分钟阅读</span>
     <span>🎯 适合非IT背景同事</span>
     <span>🗓️ 2025 年版本</span>
+  </div>
   </div>
 </div>
 
@@ -421,20 +420,20 @@
     <svg class="arch-svg" viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#6C5CE7"/>
-          <stop offset="100%" stop-color="#00CECA"/>
+          <stop offset="0%" stop-color="#bc5a33"/>
+          <stop offset="100%" stop-color="#7e8a4f"/>
         </linearGradient>
       </defs>
       <!-- Box 1 -->
-      <rect x="20" y="60" width="140" height="60" rx="12" fill="#f0eeff" stroke="#d4cfff" stroke-width="1.5"/>
+      <rect x="20" y="60" width="140" height="60" rx="12" fill="#f3ece1" stroke="#e3d8c6" stroke-width="1.5"/>
       <text x="90" y="84" text-anchor="middle" font-size="22">💡</text>
-      <text x="90" y="105" text-anchor="middle" font-size="12" fill="#4a4a6a" font-weight="600">你的想法</text>
-      <text x="90" y="120" text-anchor="middle" font-size="11" fill="#8888aa">（不需要写代码）</text>
+      <text x="90" y="105" text-anchor="middle" font-size="12" fill="#5a5347" font-weight="600">你的想法</text>
+      <text x="90" y="120" text-anchor="middle" font-size="11" fill="#8c7f6e">（不需要写代码）</text>
       <!-- Arrow -->
       <path d="M165 90 L205 90" stroke="url(#g1)" stroke-width="2.5" marker-end="url(#arr)"/>
       <defs>
         <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="#6C5CE7"/>
+          <path d="M0,0 L0,6 L8,3 z" fill="#bc5a33"/>
         </marker>
       </defs>
       <!-- Box 2 (Dify) -->
@@ -445,10 +444,10 @@
       <!-- Arrow -->
       <path d="M475 90 L515 90" stroke="url(#g1)" stroke-width="2.5" marker-end="url(#arr)"/>
       <!-- Box 3 -->
-      <rect x="520" y="60" width="140" height="60" rx="12" fill="#e8fdfb" stroke="#b2f5ea" stroke-width="1.5"/>
+      <rect x="520" y="60" width="140" height="60" rx="12" fill="#eef0e2" stroke="#cdd3ad" stroke-width="1.5"/>
       <text x="590" y="84" text-anchor="middle" font-size="22">🚀</text>
-      <text x="590" y="105" text-anchor="middle" font-size="12" fill="#4a4a6a" font-weight="600">你的 AI 应用</text>
-      <text x="590" y="120" text-anchor="middle" font-size="11" fill="#8888aa">（即刻可用）</text>
+      <text x="590" y="105" text-anchor="middle" font-size="12" fill="#5a5347" font-weight="600">你的 AI 应用</text>
+      <text x="590" y="120" text-anchor="middle" font-size="11" fill="#8c7f6e">（即刻可用）</text>
     </svg>
   </div>
 
@@ -562,8 +561,8 @@
     <svg class="arch-svg" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="gMain" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#6C5CE7"/>
-          <stop offset="100%" stop-color="#00CECA"/>
+          <stop offset="0%" stop-color="#bc5a33"/>
+          <stop offset="100%" stop-color="#7e8a4f"/>
         </linearGradient>
       </defs>
 
@@ -574,37 +573,37 @@
       <text x="340" y="170" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)">GPT-4 · Claude · Gemini 等</text>
 
       <!-- Left top: Chatbot -->
-      <rect x="20" y="20" width="140" height="55" rx="10" fill="#f0eeff" stroke="#d4cfff" stroke-width="1.5"/>
+      <rect x="20" y="20" width="140" height="55" rx="10" fill="#f3ece1" stroke="#e3d8c6" stroke-width="1.5"/>
       <text x="90" y="42" text-anchor="middle" font-size="18">💬</text>
-      <text x="90" y="60" text-anchor="middle" font-size="12" fill="#4a4a6a" font-weight="600">聊天助手</text>
-      <text x="90" y="73" text-anchor="middle" font-size="11" fill="#8888aa">Chatbot</text>
+      <text x="90" y="60" text-anchor="middle" font-size="12" fill="#5a5347" font-weight="600">聊天助手</text>
+      <text x="90" y="73" text-anchor="middle" font-size="11" fill="#8c7f6e">Chatbot</text>
 
       <!-- Left bottom: Agent -->
-      <rect x="20" y="205" width="140" height="55" rx="10" fill="#fff0f0" stroke="#ffccc7" stroke-width="1.5"/>
+      <rect x="20" y="205" width="140" height="55" rx="10" fill="#f3e6e0" stroke="#e0c4b8" stroke-width="1.5"/>
       <text x="90" y="227" text-anchor="middle" font-size="18">🤖</text>
-      <text x="90" y="245" text-anchor="middle" font-size="12" fill="#4a4a6a" font-weight="600">AI 智能体</text>
-      <text x="90" y="258" text-anchor="middle" font-size="11" fill="#8888aa">Agent</text>
+      <text x="90" y="245" text-anchor="middle" font-size="12" fill="#5a5347" font-weight="600">AI 智能体</text>
+      <text x="90" y="258" text-anchor="middle" font-size="11" fill="#8c7f6e">Agent</text>
 
       <!-- Right top: Knowledge -->
-      <rect x="520" y="20" width="140" height="55" rx="10" fill="#e8fdfb" stroke="#b2f5ea" stroke-width="1.5"/>
+      <rect x="520" y="20" width="140" height="55" rx="10" fill="#eef0e2" stroke="#cdd3ad" stroke-width="1.5"/>
       <text x="590" y="42" text-anchor="middle" font-size="18">📚</text>
-      <text x="590" y="60" text-anchor="middle" font-size="12" fill="#4a4a6a" font-weight="600">知识库</text>
-      <text x="590" y="73" text-anchor="middle" font-size="11" fill="#8888aa">Knowledge Base</text>
+      <text x="590" y="60" text-anchor="middle" font-size="12" fill="#5a5347" font-weight="600">知识库</text>
+      <text x="590" y="73" text-anchor="middle" font-size="11" fill="#8c7f6e">Knowledge Base</text>
 
       <!-- Right bottom: Workflow -->
-      <rect x="520" y="205" width="140" height="55" rx="10" fill="#fffce8" stroke="#fde68a" stroke-width="1.5"/>
+      <rect x="520" y="205" width="140" height="55" rx="10" fill="#f5ecdb" stroke="#e0c98a" stroke-width="1.5"/>
       <text x="590" y="227" text-anchor="middle" font-size="18">🔗</text>
-      <text x="590" y="245" text-anchor="middle" font-size="12" fill="#4a4a6a" font-weight="600">工作流</text>
-      <text x="590" y="258" text-anchor="middle" font-size="11" fill="#8888aa">Workflow</text>
+      <text x="590" y="245" text-anchor="middle" font-size="12" fill="#5a5347" font-weight="600">工作流</text>
+      <text x="590" y="258" text-anchor="middle" font-size="11" fill="#8c7f6e">Workflow</text>
 
       <!-- Connecting lines -->
-      <line x1="160" y1="47" x2="228" y2="115" stroke="#c4b8ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="160" y1="47" x2="228" y2="115" stroke="#dcc8b0" stroke-width="1.5" stroke-dasharray="5,3"/>
       <line x1="160" y1="232" x2="228" y2="165" stroke="#ffb8b4" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <line x1="520" y1="47" x2="452" y2="115" stroke="#9df2ea" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <line x1="520" y1="232" x2="452" y2="165" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="520" y1="47" x2="452" y2="115" stroke="#cdd3ad" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="520" y1="232" x2="452" y2="165" stroke="#e0c98a" stroke-width="1.5" stroke-dasharray="5,3"/>
 
       <!-- Bottom label -->
-      <text x="340" y="272" text-anchor="middle" font-size="12" fill="#8888aa">所有模块均通过 Dify 统一管理和调度</text>
+      <text x="340" y="272" text-anchor="middle" font-size="12" fill="#8c7f6e">所有模块均通过 Dify 统一管理和调度</text>
     </svg>
   </div>
 </div>
@@ -895,7 +894,7 @@
 </div>
 
 <!-- ═══ 资源导航 ═══ -->
-<div class="section container" style="background:linear-gradient(135deg,#f0eeff,#e8fdfb);">
+<div class="section container" style="background:linear-gradient(135deg,#f3ece1,#eef0e2);">
   <h2 style="font-size:22px; margin-bottom:20px;">🔗 进一步学习资源</h2>
   <div class="module-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
     <a href="https://dify.ai" target="_blank" style="text-decoration:none; display:block; background:white; border-radius:12px; padding:18px; border:1px solid var(--border);">

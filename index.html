@@ -86,7 +86,6 @@
       padding-bottom: 6px;
     }
 
-    /* ── Rule ── */
     hr {
       border: none;
       border-top: 1px solid var(--rule);
@@ -123,33 +122,14 @@
       margin-bottom: 8px;
     }
 
-    .project-name-en {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: clamp(28px, 3.5vw, 40px);
+    .project-name {
+      font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+      font-size: clamp(26px, 3.2vw, 38px);
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.1;
       color: var(--ink);
       margin-bottom: 4px;
-    }
-
-    .project-name-zh {
-      font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
-      font-size: clamp(26px, 3.2vw, 38px);
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      line-height: 1.15;
-      color: var(--ink);
-      margin-bottom: 12px;
-    }
-
-    .project-desc {
-      font-family: 'Noto Sans SC', sans-serif;
-      font-weight: 300;
-      font-size: 15px;
-      line-height: 1.75;
-      color: var(--accent);
-      max-width: 420px;
     }
 
     /* ── Buttons ── */
@@ -173,7 +153,6 @@
       color: var(--ink);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 13.5px;
-      letter-spacing: 0;
       min-width: 152px;
       transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
@@ -189,9 +168,20 @@
       font-size: 15px;
       line-height: 1;
       transition: color 0.15s;
+      flex-shrink: 0;
     }
 
     .btn:hover .btn-arrow { color: var(--paper); }
+
+    /* ── Loading / Error states ── */
+    .state-row {
+      padding: 44px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--rule);
+    }
 
     /* ── Footer ── */
     footer {
@@ -233,67 +223,141 @@
       <div class="site-label">Personal Demo Collection</div>
       <div class="hero">
         <h1>Demo<br>Hub</h1>
-        <p class="hero-desc">汇总不同主题的交互演示与培训材料。点击进入各项目的 Overview 与 Deep Dive 页面。</p>
+        <p class="hero-desc">汇总不同主题的交互演示与培训材料。</p>
       </div>
     </header>
 
     <hr>
 
-    <main>
-
-      <!-- 01 Dify Training -->
-      <div class="project">
-        <div class="project-num">01</div>
-        <div class="project-body">
-          <div class="project-tag">AI &nbsp;·&nbsp; 培训</div>
-          <div class="project-name-en">Dify Training</div>
-          <p class="project-desc">Dify 平台的培训材料，涵盖功能概览与深度解析。</p>
-        </div>
-        <div class="project-links">
-          <a class="btn" href="dify-training/overview.html">Overview <span class="btn-arrow">↗</span></a>
-          <a class="btn" href="dify-training/deep-dive.html">Deep Dive <span class="btn-arrow">↗</span></a>
-        </div>
-      </div>
-
-      <!-- 02 AI Newsletter -->
-      <div class="project">
-        <div class="project-num">02</div>
-        <div class="project-body">
-          <div class="project-tag">AI &nbsp;·&nbsp; 项目案例</div>
-          <div class="project-name-zh">AI 咨询聚合邮件订阅系统</div>
-          <p class="project-desc">基于 Dify 等工具构建的 Follow Builders AI 资讯聚合与邮件推送系统。</p>
-        </div>
-        <div class="project-links">
-          <a class="btn" href="ai-newsletter/overview.html">Overview <span class="btn-arrow">↗</span></a>
-          <a class="btn" href="ai-newsletter/deep-dive.html">Deep Dive <span class="btn-arrow">↗</span></a>
-        </div>
-      </div>
-
-      <!--
-        新增项目时，复制以下模板，填入内容：
-
-        <div class="project">
-          <div class="project-num">03</div>
-          <div class="project-body">
-            <div class="project-tag">分类 &nbsp;·&nbsp; 标签</div>
-            <div class="project-name-en">English Project Name</div>
-            <!-- 中文项目名用 project-name-zh -->
-            <p class="project-desc">项目简短描述。</p>
-          </div>
-          <div class="project-links">
-            <a class="btn" href="folder-name/overview.html">Overview <span class="btn-arrow">↗</span></a>
-            <a class="btn" href="folder-name/deep-dive.html">Deep Dive <span class="btn-arrow">↗</span></a>
-          </div>
-        </div>
-      -->
-
+    <main id="main">
+      <div class="state-row" id="status">正在加载…</div>
     </main>
 
     <footer>
-      <span class="footer-text">02 Projects</span>
+      <span class="footer-text" id="footer-count">— Projects</span>
       <span class="footer-text">Demo Hub</span>
     </footer>
 
   </div>
+
+  <script>
+    // ── Config ──────────────────────────────────────────────────────────────
+    // Derived from the GitHub Pages URL: ying-bot-glitch.github.io/follow-builders
+    const OWNER = 'ying-bot-glitch';
+    const REPO  = 'follow-builders';
+    const BRANCH = 'main';
+
+    // Files / folders at root level to ignore entirely
+    const ROOT_IGNORE = new Set(['index.html', '.nojekyll', 'README.md', 'README', 'LICENSE', '.gitignore']);
+
+    // ── Helpers ─────────────────────────────────────────────────────────────
+    const api = path =>
+      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`)
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+
+    // Strip .html extension for button label, title-case the slug
+    const labelFromFilename = name => {
+      const base = name.replace(/\.html$/i, '');
+      return base.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    };
+
+    // Folder slug → display title (capitalise each word, replace hyphens/underscores)
+    const titleFromSlug = slug =>
+      slug.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    // ── Render ───────────────────────────────────────────────────────────────
+    async function load() {
+      const main   = document.getElementById('main');
+      const status = document.getElementById('status');
+
+      let rootItems;
+      try {
+        rootItems = await api('');
+      } catch (e) {
+        status.textContent = '无法连接 GitHub API，请稍后刷新重试。';
+        return;
+      }
+
+      // Separate root-level HTML files and folders (skip ignored names)
+      const rootHtmlFiles = rootItems.filter(
+        i => i.type === 'file' && i.name.endsWith('.html') && !ROOT_IGNORE.has(i.name)
+      );
+      const folders = rootItems.filter(
+        i => i.type === 'dir' && !i.name.startsWith('.') && !ROOT_IGNORE.has(i.name)
+      );
+
+      // Build entries: each folder becomes one project; root HTML files also become entries
+      // Fetch folder contents in parallel
+      const folderEntries = await Promise.all(
+        folders.map(async folder => {
+          try {
+            const files = await api(folder.path);
+            const htmlFiles = files.filter(f => f.type === 'file' && f.name.endsWith('.html'));
+            return { type: 'folder', slug: folder.name, files: htmlFiles };
+          } catch {
+            return { type: 'folder', slug: folder.name, files: [] };
+          }
+        })
+      );
+
+      // Root-level HTML files become standalone entries
+      const rootEntries = rootHtmlFiles.map(f => ({
+        type: 'file',
+        slug: f.name,
+        files: [f],
+      }));
+
+      // Merge: folders first, then loose root files
+      const entries = [...folderEntries, ...rootEntries].filter(
+        e => e.files.length > 0
+      );
+
+      // Clear loading state
+      main.innerHTML = '';
+
+      if (entries.length === 0) {
+        main.innerHTML = '<div class="state-row">仓库中暂无 HTML 文件。</div>';
+        return;
+      }
+
+      entries.forEach((entry, idx) => {
+        const num = String(idx + 1).padStart(2, '0');
+        const title = entry.type === 'folder'
+          ? titleFromSlug(entry.slug)
+          : labelFromFilename(entry.slug);
+
+        const buttonsHtml = entry.files.map(f => {
+          const label = labelFromFilename(f.name);
+          // Build the GitHub Pages URL for this file
+          const href = entry.type === 'folder'
+            ? `${entry.slug}/${f.name}`
+            : f.name;
+          return `<a class="btn" href="${href}">${label} <span class="btn-arrow">↗</span></a>`;
+        }).join('\n          ');
+
+        const tag = entry.type === 'folder'
+          ? `<span class="project-tag">${entry.slug}</span>`
+          : `<span class="project-tag">root</span>`;
+
+        const div = document.createElement('div');
+        div.className = 'project';
+        div.innerHTML = `
+          <div class="project-num">${num}</div>
+          <div class="project-body">
+            ${tag}
+            <div class="project-name">${title}</div>
+          </div>
+          <div class="project-links">
+            ${buttonsHtml}
+          </div>`;
+        main.appendChild(div);
+      });
+
+      document.getElementById('footer-count').textContent =
+        `${String(entries.length).padStart(2, '0')} Projects`;
+    }
+
+    load();
+  </script>
 </body>
 </html>

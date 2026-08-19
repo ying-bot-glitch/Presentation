@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8D D2 问题解决 AI 助手 — 项目规划</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @font-face {
+    font-family: "boschsans";
+    font-weight: 400;
+    src: url(https://brandguide-cdn.azureedge.net/fonts/BoschSans-Regular.woff2) format("woff2"),
+         url(https://brandguide-cdn.azureedge.net/fonts/BoschSans-Regular.woff) format("woff");
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "boschsans";
+    font-weight: 700;
+    src: url(https://brandguide-cdn.azureedge.net/fonts/BoschSans-Bold.woff2) format("woff2"),
+         url(https://brandguide-cdn.azureedge.net/fonts/BoschSans-Bold.woff) format("woff");
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "boschsans";
+    font-weight: 400;
+    font-style: italic;
+    src: url(https://brandguide-cdn.azureedge.net/fonts/BoschSans-RegularItalic.woff2) format("woff2"),
+         url(https://brandguide-cdn.azureedge.net/fonts/BoschSans-RegularItalic.woff) format("woff");
+    font-display: swap;
+  }
+  :root {
+    --bosch-blue: #005691;
+    --bosch-dark-blue: #003B5C;
+    --bosch-red: #E2001A;
+    --bosch-green: #008A4B;
+    --bosch-gray: #6B7280;
+    --bosch-light: #F0F4F7;
+    --bosch-purple: #7B5EA7;
+    --bosch-teal: #00A0B0;
+    --bosch-orange: #E87722;
+  }
+  * { font-family: "boschsans", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
+  body { background: #F8F9FA; color: #1A1A1A; }
+  .nav-link { position: relative; transition: color .2s; }
+  .nav-link::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px; background:var(--bosch-blue); transition:width .25s; }
+  .nav-link:hover::after, .nav-link.active::after { width:100%; }
+  .nav-link.active { color: var(--bosch-blue); }
+
+  /* Gantt */
+  .gantt-grid {
+    display: grid;
+    grid-template-columns: 170px repeat(11, minmax(0,1fr));
+    gap: 3px;
+  }
+  .gantt-cell {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    border-radius: 4px;
+  }
+  .gantt-week-header {
+    color: var(--bosch-gray);
+    font-weight: 700;
+    font-size: 11px;
+    border-bottom: 2px solid #E5E7EB;
+    padding-bottom: 4px;
+  }
+  .gantt-sprint-band {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 4px;
+    display:flex; align-items:center; justify-content:center;
+    min-height: 24px;
+    margin-bottom: 3px;
+  }
+  .gantt-bar {
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    border-radius: 4px;
+    display:flex; align-items:center; padding: 0 8px;
+    min-height: 32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .gantt-bar:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.15); z-index: 10; }
+  .gantt-bar-empty { background: transparent; }
+  .bar-green { background: var(--bosch-green); }
+  .bar-green-light { background: #5CB85C; }
+  .bar-blue { background: var(--bosch-blue); }
+  .bar-blue-light { background: #4A90D9; }
+  .bar-purple { background: var(--bosch-purple); }
+  .bar-purple-light { background: #A98ED0; }
+  .bar-teal { background: var(--bosch-teal); }
+  .bar-teal-light { background: #5CBEC8; }
+  .bar-orange { background: var(--bosch-orange); }
+  .bar-red { background: var(--bosch-red); }
+  .bar-gray { background: #9CA3AF; }
+
+  /* Sprint cards */
+  .sprint-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    transition: box-shadow .2s, transform .2s;
+    overflow: hidden;
+  }
+  .sprint-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,.08); transform: translateY(-2px); }
+  .sprint-header { padding: 16px 20px; color: #fff; }
+  .sprint-body { padding: 16px 20px; }
+
+  /* Architecture */
+  .arch-layer {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    padding: 20px;
+    position: relative;
+  }
+  .arch-layer-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 12px;
+  }
+  .arch-component {
+    background: #F8F9FA;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 12px 14px;
+    text-align: center;
+    transition: border-color .2s, background .2s;
+  }
+  .arch-component:hover { border-color: var(--bosch-blue); background: var(--bosch-light); }
+  .arch-arrow {
+    display: flex; align-items: center; justify-content: center;
+    height: 28px; color: var(--bosch-gray); font-size: 18px;
+  }
+
+  /* Data flow */
+  .flow-step {
+    background: #fff;
+    border: 2px solid var(--bosch-blue);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+    position: relative;
+  }
+  .flow-arrow { color: var(--bosch-blue); font-size: 20px; display:flex; align-items:center; }
+
+  /* Team role card */
+  .role-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    overflow: hidden;
+    transition: box-shadow .2s;
+  }
+  .role-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,.08); }
+  .role-badge {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: #fff;
+  }
+
+  /* Milestone diamond */
+  .milestone-diamond {
+    width: 14px; height: 14px;
+    background: var(--bosch-red);
+    transform: rotate(45deg);
+    display: inline-block;
+    margin: 0 4px;
+  }
+
+  /* Matrix table */
+  .matrix-table { border-collapse: separate; border-spacing: 0; width: 100%; }
+  .matrix-table th, .matrix-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #E5E7EB;
+    font-size: 13px;
+    text-align: left;
+  }
+  .matrix-table th {
+    background: var(--bosch-light);
+    font-weight: 700;
+    color: var(--bosch-dark-blue);
+  }
+  .matrix-table tr:hover td { background: #FAFBFC; }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s, transform .5s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Print */
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff; }
+    .sprint-card, .arch-layer, .role-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Bosch Header Banner -->
+<header>
+  <div class="w-full h-1.5 overflow-hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" preserveAspectRatio="xMidYMid slice" height="300" width="720" version="1.1" y="0" x="0" viewBox="0 0 720 300" style="width:100%;height:100%;display:block">
+      <style type="text/css">
+        .st0{fill:url(#SVGID_1_)}.st1{fill:url(#SVGID_2_)}.st2{fill:url(#SVGID_3_)}.st3{fill:url(#SVGID_4_)}.st4{fill:url(#SVGID_5_)}.st5{fill:#AF2024}.st6{fill:url(#SVGID_6_)}.st7{fill:#941B1E}.st8{fill:#B12739}.st9{fill:#952432}.st10{fill:#D42027}.st11{fill:url(#SVGID_7_)}.st12{fill:url(#SVGID_8_)}.st13{fill:#1C9A48}.st14{fill:url(#SVGID_9_)}.st15{fill:url(#SVGID_10_)}.st16{fill:#2A3886}.st17{fill:url(#SVGID_11_)}.st18{fill:url(#SVGID_12_)}.st19{fill:url(#SVGID_13_)}.st20{fill:url(#SVGID_14_)}
+      </style>
+      <g transform="translate(-1.55,-3.3)">
+        <linearGradient id="SVGID_1_" y2="-32.663" gradientUnits="userSpaceOnUse" y1="-32.663" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="842.08" x1="118.98"><stop stop-color="#952331" offset="0"/><stop stop-color="#921C1D" offset=".036094"/><stop stop-color="#B02739" offset=".084649"/><stop stop-color="#AD1F24" offset=".1237"/><stop stop-color="#C72026" offset=".1509"/><stop stop-color="#D42027" offset=".1697"/><stop stop-color="#CC2431" offset=".1758"/><stop stop-color="#B72B4C" offset=".1888"/><stop stop-color="#953371" offset=".2074"/><stop stop-color="#88357F" offset=".2142"/><stop stop-color="#853681" offset=".2436"/><stop stop-color="#6F368B" offset=".2638"/><stop stop-color="#39428F" offset=".2911"/><stop stop-color="#233D7D" offset=".3242"/><stop stop-color="#322C6F" offset=".4181"/><stop stop-color="#2A3885" offset=".494"/><stop stop-color="#1D62A1" offset=".5581"/><stop stop-color="#276CA5" offset=".5702"/><stop stop-color="#438EB3" offset=".6103"/><stop stop-color="#55A5BC" offset=".6399"/><stop stop-color="#5CAFBF" offset=".6556"/><stop stop-color="#56ABBD" offset=".6777"/><stop stop-color="#439FB8" offset=".7058"/><stop stop-color="#188EAF" offset=".7372"/><stop stop-color="#038BAE" offset=".7426"/><stop stop-color="#069292" offset=".7898"/><stop stop-color="#05A14B" offset=".8875"/><stop stop-color="#03927E" offset="1"/></linearGradient>
+        <rect width="723.1" y="0" x="0" height="306.4" class="st0" fill="url(#SVGID_1_)"/>
+        <linearGradient id="SVGID_2_" y2="-109.26" gradientUnits="userSpaceOnUse" y1="-109.26" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="235.98" x1="325.08"><stop stop-color="#893680" offset="0"/><stop stop-color="#893680" offset=".3354"/><stop stop-color="#8D316D" offset=".5025"/><stop stop-color="#90294D" offset=".8398"/><stop stop-color="#902541" offset="1"/></linearGradient>
+        <polygon points="175.1 153.2 117 306.4 206.1 306.4" fill="url(#SVGID_2_)" class="st1"/>
+        <linearGradient id="SVGID_3_" y2="-82.284" gradientUnits="userSpaceOnUse" y1="120.24" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="446.55" x1="478.93"><stop stop-color="#322C6F" offset="0"/><stop stop-color="#322C6F" offset=".2427"/><stop stop-color="#302F72" offset=".4599"/><stop stop-color="#2A3A7E" offset=".7155"/><stop stop-color="#154A93" offset=".9896"/><stop stop-color="#134B94" offset="1"/></linearGradient>
+        <polygon points="288.4 153.2 310.7 306.4 358.1 306.4 358.1 0 312.9 0" fill="url(#SVGID_3_)" class="st2"/>
+        <linearGradient id="SVGID_4_" y2="-32.663" gradientUnits="userSpaceOnUse" y1="-32.663" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="372.88" x1="294.08"><stop stop-color="#6F378D" offset="0"/><stop stop-color="#3A4291" offset="1"/></linearGradient>
+        <polygon points="175.1 153.2 206.1 306.4 253.9 153.2 209.4 0 209.4 0" fill="url(#SVGID_4_)" class="st3"/>
+        <linearGradient id="SVGID_5_" y2="-32.663" gradientUnits="userSpaceOnUse" y1="-32.663" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="325.08" x1="431.88"><stop stop-color="#233D7D" offset="0"/><stop stop-color="#293D7D" offset=".2495"/><stop stop-color="#3A3C80" offset=".5446"/><stop stop-color="#513B84" offset=".8616"/><stop stop-color="#5D3A86" offset="1"/></linearGradient>
+        <polygon points="253.9 153.2 206.1 306.4 310.7 306.4 288.4 153.2 312.9 0 209.4 0" fill="url(#SVGID_5_)" class="st4"/>
+        <polygon points="116.1 0 55.7 0 55.7 94.8 89.9 153.2 55.7 211.6 55.7 306.4 117 306.4 95.2 153.2" fill="#af2024" class="st5"/>
+        <linearGradient id="SVGID_6_" y2="43.937" gradientUnits="userSpaceOnUse" y1="43.937" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="232.67" x1="329.11"><stop stop-color="#893680" offset="0"/><stop stop-color="#893680" offset=".3354"/><stop stop-color="#8D316D" offset=".5025"/><stop stop-color="#90294D" offset=".8398"/><stop stop-color="#902541" offset="1"/></linearGradient>
+        <polygon points="175.1 153.2 209.4 0 116.1 0" fill="url(#SVGID_6_)" class="st6"/>
+        <polygon points="55.7 94.8 55.7 0 0 0" fill="#941b1e" class="st7"/>
+        <polygon points="55.7 211.6 89.9 153.2 55.7 94.8" fill="#b12739" class="st8"/>
+        <polygon points="55.7 211.6 0 306.4 55.7 306.4" fill="#941b1e" class="st7"/>
+        <polygon points="55.7 94.8 0 0 0 306.4 55.7 211.6" fill="#952432" class="st9"/>
+        <polygon points="116.1 0 95.2 153.2 117 306.4 175.1 153.2" fill="#d42027" class="st10"/>
+        <linearGradient id="SVGID_7_" y2="-186.06" gradientUnits="userSpaceOnUse" y1="120.44" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="748.96" x1="748.96"><stop stop-color="#94BE55" offset="0"/><stop stop-color="#93BD58" offset=".044340"/><stop stop-color="#8BBC6A" offset=".3891"/><stop stop-color="#86BC75" offset=".7149"/><stop stop-color="#84BC79" offset="1"/></linearGradient>
+        <path d="m641.6 259.6c1.7-25.4 10-54.6 18.8-85.6 1.4-5 2.8-10 4.2-15.1-1.4-5.5-2.8-10.9-4.2-16.2-8.8-33.3-17-64.7-18.8-92-1.4-21.2 1.4-37 8.9-50.6h-45.9c-7.5 18.3-10.3 29.1-8.9 50.3 1.7 27.3 10 58.7 18.8 92 13 49.3 28 106.2 23.2 164.2h12.9c-7.6-12.8-10.4-27.3-9-47z" class="st11" fill="url(#SVGID_7_)"/>
+        <linearGradient id="SVGID_8_" y2="-184.45" gradientUnits="userSpaceOnUse" y1="117.29" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="733.49" x1="653.76"><stop stop-color="#08A24B" offset="0"/><stop stop-color="#0AA14E" offset=".1678"/><stop stop-color="#0B9E57" offset=".4047"/><stop stop-color="#099A67" offset=".6827"/><stop stop-color="#04947D" offset=".9898"/><stop stop-color="#04937E" offset="1"/></linearGradient>
+        <path d="m614.5 142.3c-8.8-33.3-17-64.7-18.8-92-1.4-21.2 1.4-32 8.9-50.3h-35.4c5.7 53.9-3.8 106.7-13.6 166.8-5.7 35-11.7 71.3-13.2 100.6-1.1 21.1 0.4 32.8 1.8 39h93.5c4.8-57.9-10.3-114.8-23.2-164.1z" class="st12" fill="url(#SVGID_8_)"/>
+        <path class="st13" fill="#1c9a48" d="m664.6 158.9c-1.4 5.1-2.8 10.1-4.2 15.1-8.8 31-17 60.2-18.8 85.6-1.4 19.7 1.4 34.2 9 46.9h33c4.2-51.8-7.2-102.3-19-147.6z"/>
+        <linearGradient id="SVGID_9_" y2="-185.96" gradientUnits="userSpaceOnUse" y1="120.54" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="812.83" x1="812.83"><stop stop-color="#69A060" offset="0"/><stop stop-color="#639D5C" offset=".039895"/><stop stop-color="#4C944F" offset=".2192"/><stop stop-color="#378E47" offset=".4184"/><stop stop-color="#298B44" offset=".6515"/><stop stop-color="#238A43" offset="1"/></linearGradient>
+        <path d="m680.5 0c10.7 55.3-2.5 110.4-15.9 158.9 11.7 45.3 23.2 95.8 18.9 147.6h39.6v-306.5h-42.6z" class="st14" fill="url(#SVGID_9_)"/>
+        <linearGradient id="SVGID_10_" y2="-185.86" gradientUnits="userSpaceOnUse" y1="120.54" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="652.45" x1="652.45"><stop stop-color="#05B5DC" offset="0"/><stop stop-color="#04B0D7" offset=".2197"/><stop stop-color="#05A4C9" offset=".5371"/><stop stop-color="#0591B4" offset=".9122"/><stop stop-color="#058CAE" offset="1"/></linearGradient>
+        <path d="m542.3 267.4c1.5-29.4 7.5-65.6 13.2-100.6 9.8-60.1 19.3-112.8 13.6-166.8h-70.8c-1.4 11.4-2.9 19.2-1.8 41.8 1.5 31.6 7.5 70.5 13.2 108.2 8.4 55.4 16.6 108.8 15.1 156.4h19.2c-1.3-6.2-2.8-17.9-1.7-39z" class="st15" fill="url(#SVGID_10_)"/>
+        <polygon points="375.7 153.2 358.1 0 358.1 306.4" fill="#2a3886" class="st16"/>
+        <linearGradient id="SVGID_11_" y2="77.136" gradientUnits="userSpaceOnUse" y1="-4.3281" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="796.71" x1="751.05"><stop stop-color="#62B16E" offset="0"/><stop stop-color="#87B957" offset="1"/></linearGradient>
+        <path d="m641.6 50.6c1.7 27.3 10 58.7 18.8 92 1.4 5.3 2.8 10.7 4.2 16.2 13.5-48.4 26.6-103.5 15.9-158.8h-30c-7.5 13.6-10.3 29.4-8.9 50.6z" class="st17" fill="url(#SVGID_11_)"/>
+        <linearGradient id="SVGID_12_" y2="-189.28" gradientUnits="userSpaceOnUse" y1="113.71" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="631.59" x1="550.4"><stop stop-color="#069AD4" offset="0"/><stop stop-color="#30A0CE" offset=".3525"/><stop stop-color="#5BB0C0" offset="1"/></linearGradient>
+        <path d="m509.8 150c-5.7-37.7-11.7-76.6-13.2-108.2-1.1-22.7 0.4-30.4 1.8-41.8h-41.5c1.5 40.1-1.5 85.3-7 160.8-3.1 43.5-8 110.5-7 145.7h82.1c1.4-47.7-6.8-101.1-15.2-156.5z" class="st18" fill="url(#SVGID_12_)"/>
+        <linearGradient id="SVGID_13_" y2="-185.86" gradientUnits="userSpaceOnUse" y1="120.54" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="505.33" x1="505.33"><stop stop-color="#1E458E" offset="0"/><stop stop-color="#1F4F96" offset=".2411"/><stop stop-color="#2B6AAB" offset=".7292"/><stop stop-color="#337BB9" offset="1"/></linearGradient>
+        <polygon points="358.1 306.4 414.6 306.4 414.6 0 358.1 0 375.7 153.2" fill="url(#SVGID_13_)" class="st19"/>
+        <linearGradient id="SVGID_14_" y2="120.54" gradientUnits="userSpaceOnUse" y1="-185.86" gradientTransform="matrix(1 0 0 -1 -118.98 120.54)" x2="554.92" x1="554.92"><stop stop-color="#3F9AC9" offset="0"/><stop stop-color="#2062A2" offset="1"/></linearGradient>
+        <path d="m449.9 160.8c5.5-75.5 8.5-120.6 7-160.8h-42.2l-0.1 306.4h28.3c-1-35.1 3.8-102.1 7-145.6z" class="st20" fill="url(#SVGID_14_)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <p class="text-sm font-bold tracking-wider uppercase" style="color:var(--bosch-red)">8D Problem Solving · D2 Phase</p>
+        <h1 class="text-3xl sm:text-4xl font-bold mt-1" style="color:var(--bosch-dark-blue)">问题解决 AI 助手 — 项目规划</h1>
+        <p class="text-base mt-2" style="color:var(--bosch-gray)">敏捷开发 · Skill 驱动 · 持续迭代</p>
+      </div>
+      <div class="flex gap-3 flex-wrap">
+        <div class="bg-white rounded-lg border border-gray-200 px-4 py-2 text-center">
+          <div class="text-2xl font-bold" style="color:var(--bosch-blue)">3</div>
+          <div class="text-xs" style="color:var(--bosch-gray)">团队成员</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 px-4 py-2 text-center">
+          <div class="text-2xl font-bold" style="color:var(--bosch-blue)">6</div>
+          <div class="text-xs" style="color:var(--bosch-gray)">Sprint 周期</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 px-4 py-2 text-center">
+          <div class="text-2xl font-bold" style="color:var(--bosch-blue)">11</div>
+          <div class="text-xs" style="color:var(--bosch-gray)">周</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Sticky Nav -->
+<nav class="no-print sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-6 h-12">
+    <a href="#overview" class="nav-link text-sm font-semibold text-gray-600 active">概览</a>
+    <a href="#timeline" class="nav-link text-sm font-semibold text-gray-600">时间线</a>
+    <a href="#team" class="nav-link text-sm font-semibold text-gray-600">团队分工</a>
+    <a href="#architecture" class="nav-link text-sm font-semibold text-gray-600">产品架构</a>
+    <a href="#iteration" class="nav-link text-sm font-semibold text-gray-600">迭代策略</a>
+  </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+<!-- ==================== OVERVIEW ==================== -->
+<section id="overview" class="reveal">
+  <h2 class="text-2xl font-bold mb-1" style="color:var(--bosch-dark-blue)">项目概览</h2>
+  <div class="w-12 h-1 rounded mb-6" style="background:var(--bosch-red)"></div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <!-- Goal -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:var(--bosch-blue)">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg">核心目标</h3>
+      </div>
+      <p class="text-sm leading-relaxed text-gray-600">从一种产品开始，通过 4-5 轮 AI 辅助的提取与问答，沉淀出可复用的<strong style="color:var(--bosch-blue)">数据提取 + 补充提问 Skill</strong>，自动生成 Is/IsNot 表格和根本性问题总结，作为 D2 的结构化输出。</p>
+    </div>
+
+    <!-- Approach -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:var(--bosch-green)">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </div>
+        <h3 class="font-bold text-lg">敏捷方法</h3>
+      </div>
+      <p class="text-sm leading-relaxed text-gray-600">先让用户用起来，再持续迭代。Sprint 3 即交付 UI MVP，Sprint 4 放给用户试用。Skill 和知识库在每个 Sprint 末尾 Review 后迭代更新，形成<strong style="color:var(--bosch-green)">使用 → 反馈 → 优化</strong>的闭环。</p>
+    </div>
+
+    <!-- Scope -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:var(--bosch-purple)">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <h3 class="font-bold text-lg">交付范围</h3>
+      </div>
+      <p class="text-sm leading-relaxed text-gray-600">D2 阶段完整闭环：产品数据提取、多轮补充提问、Is/IsNot 表格生成、根本性问题总结。知识库含产品文档与 8D 方法论资料，部署在 SharePoint / 公盘。最终输出可直接作为 D3（临时遏制措施）和 D4（根本原因分析）的输入。</p>
+    </div>
+  </div>
+
+  <!-- Key Principles -->
+  <div class="mt-6 bg-white rounded-xl border border-gray-200 p-6">
+    <h3 class="font-bold text-base mb-4" style="color:var(--bosch-dark-blue)">核心原则</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="flex items-start gap-3">
+        <span class="text-xs font-bold px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-blue)">01</span>
+        <div>
+          <p class="text-sm font-semibold">单产品切入</p>
+          <p class="text-xs text-gray-500 mt-1">先聚焦一种产品打磨流程，验证后再扩展</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-xs font-bold px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-blue)">02</span>
+        <div>
+          <p class="text-sm font-semibold">Skill 先行</p>
+          <p class="text-xs text-gray-500 mt-1">手动问答沉淀逻辑后再固化成 Skill，不急于自动化</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-xs font-bold px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-blue)">03</span>
+        <div>
+          <p class="text-sm font-semibold">早交付早反馈</p>
+          <p class="text-xs text-gray-500 mt-1">Sprint 3 出 MVP，Sprint 4 让真实用户上手</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <span class="text-xs font-bold px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-blue)">04</span>
+        <div>
+          <p class="text-sm font-semibold">知识库与 Skill 共进化</p>
+          <p class="text-xs text-gray-500 mt-1">每次迭代同步更新知识库和 Skill 逻辑</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TIMELINE ==================== -->
+<section id="timeline" class="reveal">
+  <h2 class="text-2xl font-bold mb-1" style="color:var(--bosch-dark-blue)">项目时间线</h2>
+  <div class="w-12 h-1 rounded mb-6" style="background:var(--bosch-red)"></div>
+
+  <!-- Gantt Chart -->
+  <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8 overflow-x-auto">
+    <h3 class="font-bold text-base mb-4" style="color:var(--bosch-dark-blue)">Gantt 图 — 11 周开发计划</h3>
+    <div class="min-w-[900px]">
+      <!-- Week header -->
+      <div class="gantt-grid mb-1">
+        <div></div>
+        <div class="gantt-cell gantt-week-header">W1</div>
+        <div class="gantt-cell gantt-week-header">W2</div>
+        <div class="gantt-cell gantt-week-header">W3</div>
+        <div class="gantt-cell gantt-week-header">W4</div>
+        <div class="gantt-cell gantt-week-header">W5</div>
+        <div class="gantt-cell gantt-week-header">W6</div>
+        <div class="gantt-cell gantt-week-header">W7</div>
+        <div class="gantt-cell gantt-week-header">W8</div>
+        <div class="gantt-cell gantt-week-header">W9</div>
+        <div class="gantt-cell gantt-week-header">W10</div>
+        <div class="gantt-cell gantt-week-header">W11</div>
+      </div>
+      <!-- Sprint bands -->
+      <div class="gantt-grid mb-3">
+        <div class="text-xs font-bold text-gray-500 flex items-center">Sprint 阶段</div>
+        <div class="gantt-sprint-band" style="grid-column: 2 / 3; background:#9CA3AF;">S0</div>
+        <div class="gantt-sprint-band" style="grid-column: 3 / 5; background:var(--bosch-blue);">S1</div>
+        <div class="gantt-sprint-band" style="grid-column: 5 / 7; background:var(--bosch-purple);">S2</div>
+        <div class="gantt-sprint-band" style="grid-column: 7 / 9; background:var(--bosch-teal);">S3</div>
+        <div class="gantt-sprint-band" style="grid-column: 9 / 11; background:var(--bosch-green);">S4</div>
+        <div class="gantt-sprint-band" style="grid-column: 11 / 13; background:var(--bosch-red);">S5</div>
+      </div>
+
+      <!-- Workstream: 知识库 -->
+      <div class="gantt-grid">
+        <div class="text-xs font-semibold text-gray-700 flex items-center pr-2">知识库搭建</div>
+        <div class="gantt-bar bar-green" style="grid-column: 2 / 4;">搭建 + 收集</div>
+        <div class="gantt-bar bar-green-light" style="grid-column: 4 / 7;">补充 + 整理</div>
+        <div class="gantt-bar bar-green-light" style="grid-column: 7 / 10;">优化 + 质检</div>
+        <div class="gantt-bar bar-green-light" style="grid-column: 10 / 13;">扩展多产品</div>
+      </div>
+      <!-- Workstream: 数据提取+问答 -->
+      <div class="gantt-grid mt-1">
+        <div class="text-xs font-semibold text-gray-700 flex items-center pr-2">数据提取 + 问答</div>
+        <div class="gantt-bar bar-blue" style="grid-column: 3 / 5;">R1-R2 手动问答</div>
+        <div class="gantt-bar bar-blue" style="grid-column: 5 / 7;">R3-R5 问答</div>
+      </div>
+      <!-- Workstream: Skill 开发 -->
+      <div class="gantt-grid mt-1">
+        <div class="text-xs font-semibold text-gray-700 flex items-center pr-2">Skill 开发</div>
+        <div class="gantt-bar bar-purple-light" style="grid-column: 3 / 5;">框架设计</div>
+        <div class="gantt-bar bar-purple" style="grid-column: 5 / 7;">Skill v0.1</div>
+        <div class="gantt-bar bar-purple" style="grid-column: 7 / 9;">Skill v0.2</div>
+        <div class="gantt-bar bar-purple-light" style="grid-column: 9 / 11;">迭代优化</div>
+        <div class="gantt-bar bar-purple-light" style="grid-column: 11 / 13;">扩展 + v1.0</div>
+      </div>
+      <!-- Workstream: UI 开发 -->
+      <div class="gantt-grid mt-1">
+        <div class="text-xs font-semibold text-gray-700 flex items-center pr-2">UI 开发</div>
+        <div class="gantt-bar bar-teal-light" style="grid-column: 2 / 5;">原型 + 设计</div>
+        <div class="gantt-bar bar-teal" style="grid-column: 7 / 9;">UI MVP</div>
+        <div class="gantt-bar bar-teal-light" style="grid-column: 9 / 11;">Bug 修复</div>
+        <div class="gantt-bar bar-teal-light" style="grid-column: 11 / 13;">完善功能</div>
+      </div>
+      <!-- Workstream: 用户测试 -->
+      <div class="gantt-grid mt-1">
+        <div class="text-xs font-semibold text-gray-700 flex items-center pr-2">用户测试</div>
+        <div class="gantt-bar bar-orange" style="grid-column: 9 / 11;">用户试用</div>
+      </div>
+      <!-- Workstream: D2 输出 -->
+      <div class="gantt-grid mt-1">
+        <div class="text-xs font-semibold text-gray-700 flex items-center pr-2">D2 输出</div>
+        <div class="gantt-bar bar-red" style="grid-column: 11 / 13;">格式化输出</div>
+      </div>
+
+      <!-- Milestones -->
+      <div class="gantt-grid mt-4 pt-3 border-t border-gray-200">
+        <div class="text-xs font-bold text-gray-500 flex items-center">关键里程碑</div>
+        <div class="gantt-cell"><span class="milestone-diamond" title="知识库 v0 + Case 定义"></span></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><span class="milestone-diamond" title="Skill v0.1 + 首个 Is/IsNot"></span></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><span class="milestone-diamond" title="UI MVP"></span></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><span class="milestone-diamond" title="用户反馈报告"></span></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><span class="milestone-diamond" title="Skill v1.0 + D2 输出"></span></div>
+      </div>
+      <!-- Milestone labels -->
+      <div class="gantt-grid mt-1">
+        <div></div>
+        <div class="gantt-cell text-[10px] text-gray-500 text-center leading-tight">知识库<br>v0</div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell text-[10px] text-gray-500 text-center leading-tight">Skill<br>v0.1</div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell text-[10px] text-gray-500 text-center leading-tight">UI<br>MVP</div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell text-[10px] text-gray-500 text-center leading-tight">反馈<br>报告</div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell text-[10px] text-gray-500 text-center leading-tight">v1.0<br>发布</div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex flex-wrap gap-4 mt-6 pt-4 border-t border-gray-200">
+      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bar-green"></div><span class="text-xs text-gray-600">知识库</span></div>
+      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bar-blue"></div><span class="text-xs text-gray-600">数据提取 + 问答</span></div>
+      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bar-purple"></div><span class="text-xs text-gray-600">Skill 开发</span></div>
+      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bar-teal"></div><span class="text-xs text-gray-600">UI 开发</span></div>
+      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bar-orange"></div><span class="text-xs text-gray-600">用户测试</span></div>
+      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bar-red"></div><span class="text-xs text-gray-600">D2 输出</span></div>
+      <div class="flex items-center gap-2"><span class="milestone-diamond"></span><span class="text-xs text-gray-600">里程碑</span></div>
+    </div>
+  </div>
+
+  <!-- Sprint Detail Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+    <!-- Sprint 0 -->
+    <div class="sprint-card">
+      <div class="sprint-header" style="background:#9CA3AF;">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider opacity-80">Sprint 0 · W1</span>
+          <span class="text-xs bg-white/20 px-2 py-0.5 rounded">1 周</span>
+        </div>
+        <h3 class="text-lg font-bold mt-1">准备阶段</h3>
+      </div>
+      <div class="sprint-body space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">目标</p>
+          <p class="text-sm text-gray-600">搭建基础设施，确定首个产品 Case，对齐方法论</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键活动</p>
+          <div class="space-y-1.5 text-sm">
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>搭建 SharePoint / 公盘知识库目录结构</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>收集首个产品资料 + 8D 方法论文档</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>研究 D2 方法论，定义提取 / 提问框架</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-teal)"></span>研究 MAICO Artifact，设计 UI 原型</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">交付物</p>
+          <p class="text-sm text-gray-600">知识库 v0 · 首个 Case 定义 · UI 原型设计稿</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sprint 1 -->
+    <div class="sprint-card">
+      <div class="sprint-header" style="background:var(--bosch-blue);">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider opacity-80">Sprint 1 · W2-W3</span>
+          <span class="text-xs bg-white/20 px-2 py-0.5 rounded">2 周</span>
+        </div>
+        <h3 class="text-lg font-bold mt-1">首个产品 · R1-R2 问答</h3>
+      </div>
+      <div class="sprint-body space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">目标</p>
+          <p class="text-sm text-gray-600">手动执行第 1-2 轮问答，记录提取逻辑和提问模式</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键活动</p>
+          <div class="space-y-1.5 text-sm">
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-blue)"></span>手动提取产品数据，执行 R1-R2 问答</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>记录提取逻辑、提问策略、信息缺口</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>补充产品资料，整理数据格式规范</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-teal)"></span>设计 UI 交互流程，准备前端框架</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">交付物</p>
+          <p class="text-sm text-gray-600">R1-R2 问答记录 · 提取逻辑文档 · UI 交互设计稿</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sprint 2 -->
+    <div class="sprint-card">
+      <div class="sprint-header" style="background:var(--bosch-purple);">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider opacity-80">Sprint 2 · W4-W5</span>
+          <span class="text-xs bg-white/20 px-2 py-0.5 rounded">2 周</span>
+        </div>
+        <h3 class="text-lg font-bold mt-1">R3-R5 问答 + Skill v0.1</h3>
+      </div>
+      <div class="sprint-body space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">目标</p>
+          <p class="text-sm text-gray-600">完成 4-5 轮问答，沉淀 Skill v0.1，生成首个 Is/IsNot 表格</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键活动</p>
+          <div class="space-y-1.5 text-sm">
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-blue)"></span>完成 R3-R5 问答，覆盖完整问题定义</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>将手动逻辑固化为 Skill v0.1（提取 + 提问）</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>生成首个 Is/IsNot 表格 + 根本性问题总结</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>整理历史 Case，建立数据管道</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">交付物</p>
+          <p class="text-sm text-gray-600"><strong style="color:var(--bosch-purple)">Skill v0.1</strong> · 首个 Is/IsNot 表格 · 根本性问题总结</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sprint 3 -->
+    <div class="sprint-card">
+      <div class="sprint-header" style="background:var(--bosch-teal);">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider opacity-80">Sprint 3 · W6-W7</span>
+          <span class="text-xs bg-white/20 px-2 py-0.5 rounded">2 周</span>
+        </div>
+        <h3 class="text-lg font-bold mt-1">Skill 优化 + UI MVP</h3>
+      </div>
+      <div class="sprint-body space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">目标</p>
+          <p class="text-sm text-gray-600">基于 Skill v0.1 反馈优化逻辑，开发可用的 UI MVP</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键活动</p>
+          <div class="space-y-1.5 text-sm">
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>评审 Skill v0.1，优化提取 / 提问逻辑</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-teal)"></span>基于 Skill 开发 UI MVP（MAICO Artifact）</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-teal)"></span>UI 与 Skill 集成，内部测试</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>知识库结构优化，数据质量检查</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">交付物</p>
+          <p class="text-sm text-gray-600"><strong style="color:var(--bosch-teal)">Skill v0.2</strong> · UI MVP（内部可用）</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sprint 4 -->
+    <div class="sprint-card">
+      <div class="sprint-header" style="background:var(--bosch-green);">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider opacity-80">Sprint 4 · W8-W9</span>
+          <span class="text-xs bg-white/20 px-2 py-0.5 rounded">2 周</span>
+        </div>
+        <h3 class="text-lg font-bold mt-1">用户试用 + 迭代</h3>
+      </div>
+      <div class="sprint-body space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">目标</p>
+          <p class="text-sm text-gray-600">让真实用户使用 UI，收集反馈，快速迭代</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键活动</p>
+          <div class="space-y-1.5 text-sm">
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-orange)"></span>邀请用户试用，观察使用过程</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>根据反馈迭代 Skill（提取精度 / 提问质量）</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-teal)"></span>修复 Bug，优化交互体验</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>根据知识缺口补充知识库</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">交付物</p>
+          <p class="text-sm text-gray-600"><strong style="color:var(--bosch-green)">Skill v0.3</strong> · UI v1.0（用户可用）· 用户反馈报告</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sprint 5 -->
+    <div class="sprint-card">
+      <div class="sprint-header" style="background:var(--bosch-red);">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider opacity-80">Sprint 5 · W10-W11</span>
+          <span class="text-xs bg-white/20 px-2 py-0.5 rounded">2 周</span>
+        </div>
+        <h3 class="text-lg font-bold mt-1">扩展产品 + D2 输出</h3>
+      </div>
+      <div class="sprint-body space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">目标</p>
+          <p class="text-sm text-gray-600">扩展到更多产品，完善 D2 输出格式，项目总结</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键活动</p>
+          <div class="space-y-1.5 text-sm">
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-purple)"></span>扩展 Skill 适用范围，验证多产品泛化</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-red)"></span>完善 Is/IsNot 生成 + D2 输出格式化</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-teal)"></span>UI 支持多产品切换，完善导出功能</p>
+            <p><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:var(--bosch-green)"></span>知识库扩展，项目文档总结</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">交付物</p>
+          <p class="text-sm text-gray-600"><strong style="color:var(--bosch-red)">Skill v1.0</strong> · UI v1.1 · D2 输出格式 · 项目总结</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== TEAM ==================== -->
+<section id="team" class="reveal">
+  <h2 class="text-2xl font-bold mb-1" style="color:var(--bosch-dark-blue)">团队分工</h2>
+  <div class="w-12 h-1 rounded mb-6" style="background:var(--bosch-red)"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+    <!-- Person A -->
+    <div class="role-card">
+      <div class="p-5 flex items-center gap-4 border-b border-gray-100">
+        <div class="role-badge" style="background:var(--bosch-purple)">A</div>
+        <div>
+          <h3 class="font-bold text-base">Skill 工程师</h3>
+          <p class="text-xs text-gray-500">AI / Prompt 逻辑设计</p>
+        </div>
+      </div>
+      <div class="p-5 space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">核心职责</p>
+          <p class="text-sm text-gray-600">设计数据提取逻辑、补充提问策略、Is/IsNot 生成和根本问题总结的 Skill。从手动问答中沉淀模式，固化为可复用的 AI Skill。</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键技能</p>
+          <p class="text-sm text-gray-600">8D 方法论 · Prompt Engineering · 问题分析逻辑</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">Sprint 重点</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S0 方法论研究</span>
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S1-S2 手动问答 + Skill</span>
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S3-S5 优化扩展</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Person B -->
+    <div class="role-card">
+      <div class="p-5 flex items-center gap-4 border-b border-gray-100">
+        <div class="role-badge" style="background:var(--bosch-green)">B</div>
+        <div>
+          <h3 class="font-bold text-base">知识库工程师</h3>
+          <p class="text-xs text-gray-500">数据 / 知识管理</p>
+        </div>
+      </div>
+      <div class="p-5 space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">核心职责</p>
+          <p class="text-sm text-gray-600">搭建和维护 SharePoint / 公盘知识库，收集产品文档和 8D 方法论资料，建立数据管道，确保知识库与 Skill 同步进化。</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键技能</p>
+          <p class="text-sm text-gray-600">SharePoint 管理 · 文档结构化 · 数据质量管控</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">Sprint 重点</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S0 搭建知识库</span>
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S1-S2 补充 + 管道</span>
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S3-S5 优化扩展</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Person C -->
+    <div class="role-card">
+      <div class="p-5 flex items-center gap-4 border-b border-gray-100">
+        <div class="role-badge" style="background:var(--bosch-teal)">C</div>
+        <div>
+          <h3 class="font-bold text-base">UI 开发工程师</h3>
+          <p class="text-xs text-gray-500">前端 / 用户体验</p>
+        </div>
+      </div>
+      <div class="p-5 space-y-3">
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">核心职责</p>
+          <p class="text-sm text-gray-600">基于 Skill 输出开发 MAICO Artifact UI，实现产品输入、问答交互、Is/IsNot 表格展示和报告导出。负责用户体验设计和前端迭代。</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">关键技能</p>
+          <p class="text-sm text-gray-600">HTML/CSS/JS · MAICO Artifact · UX 设计</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase text-gray-400 mb-1">Sprint 重点</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S0-S2 原型设计</span>
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S3 UI MVP</span>
+            <span class="text-xs px-2 py-1 rounded" style="background:var(--bosch-light);color:var(--bosch-dark-blue)">S4-S5 迭代完善</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsibility Matrix -->
+  <div class="bg-white rounded-xl border border-gray-200 p-6 overflow-x-auto">
+    <h3 class="font-bold text-base mb-4" style="color:var(--bosch-dark-blue)">RACI 责任矩阵</h3>
+    <div class="min-w-[700px]">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>任务 / 交付物</th>
+            <th class="text-center">A · Skill 工程师</th>
+            <th class="text-center">B · 知识库工程师</th>
+            <th class="text-center">C · UI 开发工程师</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>知识库搭建 (SharePoint / 公盘)</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+          </tr>
+          <tr>
+            <td>产品资料 + 方法论文档收集</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#F3F4F6;color:#6B7280">I</span></td>
+          </tr>
+          <tr>
+            <td>手动数据提取 + 问答执行</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#F3F4F6;color:#6B7280">I</span></td>
+          </tr>
+          <tr>
+            <td>Skill 开发 (提取 + 提问 + 生成)</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+          </tr>
+          <tr>
+            <td>Is/IsNot 表格 + 根本问题总结</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#F3F4F6;color:#6B7280">I</span></td>
+          </tr>
+          <tr>
+            <td>UI 设计 + 开发 (MAICO Artifact)</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#F3F4F6;color:#6B7280">I</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+          </tr>
+          <tr>
+            <td>用户测试 + 反馈收集</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+          </tr>
+          <tr>
+            <td>D2 输出格式化</td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#D1FAE5;color:#065F46">R/A</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+            <td class="text-center"><span class="text-xs font-bold px-2 py-0.5 rounded" style="background:#FEF3C7;color:#92400E">C</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="flex gap-4 mt-3 text-xs text-gray-500">
+        <span><strong>R</strong> = 负责 · <strong>A</strong> = 问责 · <strong>C</strong> = 咨询 · <strong>I</strong> = 知情</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ARCHITECTURE ==================== -->
+<section id="architecture" class="reveal">
+  <h2 class="text-2xl font-bold mb-1" style="color:var(--bosch-dark-blue)">产品架构</h2>
+  <div class="w-12 h-1 rounded mb-6" style="background:var(--bosch-red)"></div>
+
+  <p class="text-sm text-gray-600 mb-6 max-w-3xl">采用分层架构设计，各层解耦、可独立迭代。Skill 层是核心，知识库层提供数据支撑，UI 层面向用户。所有层运行在 MAICO 平台之上，利用平台提供的 LLM Gateway、Storage 和 Artifact 能力。</p>
+
+  <!-- Layered Architecture -->
+  <div class="space-y-0">
+
+    <!-- Layer 1: UI -->
+    <div class="arch-layer" style="border-top: 4px solid var(--bosch-teal);">
+      <div class="flex items-center justify-between mb-3">
+        <div class="arch-layer-title" style="color:var(--bosch-teal)">用户界面层 · UI Layer</div>
+        <span class="text-xs text-gray-400">MAICO Artifact</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="arch-component">
+          <p class="text-sm font-semibold">产品信息输入</p>
+          <p class="text-xs text-gray-500 mt-1">产品型号、问题描述、批次信息</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">问答交互界面</p>
+          <p class="text-xs text-gray-500 mt-1">多轮对话、补充信息填写</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">Is/IsNot 表格展示</p>
+          <p class="text-xs text-gray-500 mt-1">结构化表格、可视化对比</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">报告导出</p>
+          <p class="text-xs text-gray-500 mt-1">D2 输出格式、PDF/Excel</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <!-- Layer 2: Skill -->
+    <div class="arch-layer" style="border-top: 4px solid var(--bosch-purple);">
+      <div class="flex items-center justify-between mb-3">
+        <div class="arch-layer-title" style="color:var(--bosch-purple)">Skill 层 · AI Logic Layer</div>
+        <span class="text-xs text-gray-400">核心引擎</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="arch-component">
+          <p class="text-sm font-semibold">数据提取 Skill</p>
+          <p class="text-xs text-gray-500 mt-1">从产品文档中提取关键参数和问题特征</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">补充提问 Skill</p>
+          <p class="text-xs text-gray-500 mt-1">识别信息缺口，生成针对性追问</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">Is/IsNot 生成 Skill</p>
+          <p class="text-xs text-gray-500 mt-1">基于 8D 方法论构建对比表格</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">根本问题总结 Skill</p>
+          <p class="text-xs text-gray-500 mt-1">归纳核心问题，输出 D2 结果</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <!-- Layer 3: Knowledge Base -->
+    <div class="arch-layer" style="border-top: 4px solid var(--bosch-green);">
+      <div class="flex items-center justify-between mb-3">
+        <div class="arch-layer-title" style="color:var(--bosch-green)">知识库层 · Knowledge Base Layer</div>
+        <span class="text-xs text-gray-400">SharePoint / 公盘</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="arch-component">
+          <p class="text-sm font-semibold">产品文档库</p>
+          <p class="text-xs text-gray-500 mt-1">规格书、BOM、测试报告、历史 8D 报告</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">方法论文档</p>
+          <p class="text-xs text-gray-500 mt-1">8D 流程、5Why、Fishbone、Is/IsNot 模板</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">历史案例库</p>
+          <p class="text-xs text-gray-500 mt-1">已完成的 D2 案例、常见问题模式</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <!-- Layer 4: Data -->
+    <div class="arch-layer" style="border-top: 4px solid var(--bosch-blue);">
+      <div class="flex items-center justify-between mb-3">
+        <div class="arch-layer-title" style="color:var(--bosch-blue)">数据层 · Data Layer</div>
+        <span class="text-xs text-gray-400">MAICO Storage</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="arch-component">
+          <p class="text-sm font-semibold">会话存储</p>
+          <p class="text-xs text-gray-500 mt-1">用户会话状态、进度追踪</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">问答历史</p>
+          <p class="text-xs text-gray-500 mt-1">多轮问答记录、用户回答</p>
+        </div>
+        <div class="arch-component">
+          <p class="text-sm font-semibold">提取数据 + 生成结果</p>
+          <p class="text-xs text-gray-500 mt-1">结构化提取数据、Is/IsNot 表格</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-arrow">↕</div>
+
+    <!-- Layer 5: Platform -->
+    <div class="arch-layer" style="border-top: 4px solid var(--bosch-gray); background:#F8F9FA;">
+      <div class="flex items-center justify-between mb-3">
+        <div class="arch-layer-title" style="color:var(--bosch-gray)">平台层 · MAICO Platform</div>
+        <span class="text-xs text-gray-400">基础设施</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="arch-component" style="background:#fff;">
+          <p class="text-sm font-semibold">MAICO Runtime</p>
+          <p class="text-xs text-gray-500 mt-1">Agent 运行时、Session 管理</p>
+        </div>
+        <div class="arch-component" style="background:#fff;">
+          <p class="text-sm font-semibold">LLM Gateway</p>
+          <p class="text-xs text-gray-500 mt-1">大模型调用、Token 管理</p>
+        </div>
+        <div class="arch-component" style="background:#fff;">
+          <p class="text-sm font-semibold">Artifact System</p>
+          <p class="text-xs text-gray-500 mt-1">UI 发布、版本管理、存储桥接</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Flow -->
+  <div class="mt-8 bg-white rounded-xl border border-gray-200 p-6">
+    <h3 class="font-bold text-base mb-4" style="color:var(--bosch-dark-blue)">数据流 — D2 问题定义闭环</h3>
+    <div class="overflow-x-auto">
+      <div class="min-w-[800px] flex items-center gap-2">
+        <div class="flow-step" style="border-color:var(--bosch-teal)">用户输入<br>产品 + 问题</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--bosch-purple)">数据提取<br>Skill</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--bosch-green)">知识库<br>查询</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--bosch-purple)">补充提问<br>Skill</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--bosch-teal)">用户<br>回答</div>
+        <div class="flow-arrow">↻</div>
+        <div class="flow-step" style="border-color:var(--bosch-purple)">Is/IsNot<br>生成</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--bosch-red)">根本问题<br>总结</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--bosch-red)">D2<br>输出</div>
+      </div>
+    </div>
+    <p class="text-xs text-gray-500 mt-4">补充提问与用户回答之间形成 4-5 轮迭代循环（↻），每轮提取的信息逐步完善，直到信息覆盖率达到阈值后进入 Is/IsNot 生成阶段。</p>
+  </div>
+</section>
+
+<!-- ==================== ITERATION ==================== -->
+<section id="iteration" class="reveal">
+  <h2 class="text-2xl font-bold mb-1" style="color:var(--bosch-dark-blue)">迭代策略</h2>
+  <div class="w-12 h-1 rounded mb-6" style="background:var(--bosch-red)"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <!-- Skill Iteration -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style="background:var(--bosch-purple)">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+      </div>
+      <h3 class="font-bold text-base mb-2">Skill 迭代循环</h3>
+      <div class="space-y-2 text-sm text-gray-600">
+        <p><span class="font-semibold" style="color:var(--bosch-purple)">使用</span> → 用户实际运行 Skill</p>
+        <p><span class="font-semibold" style="color:var(--bosch-purple)">评估</span> → 检查提取精度、提问质量</p>
+        <p><span class="font-semibold" style="color:var(--bosch-purple)">优化</span> → 调整 Prompt、补充规则</p>
+        <p><span class="font-semibold" style="color:var(--bosch-purple)">发布</span> → 新版本上线</p>
+      </div>
+      <div class="mt-4 pt-3 border-t border-gray-100">
+        <p class="text-xs text-gray-400">节奏：每个 Sprint 末尾 Review 后迭代</p>
+      </div>
+    </div>
+
+    <!-- Knowledge Base Iteration -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style="background:var(--bosch-green)">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+      </div>
+      <h3 class="font-bold text-base mb-2">知识库迭代循环</h3>
+      <div class="space-y-2 text-sm text-gray-600">
+        <p><span class="font-semibold" style="color:var(--bosch-green)">发现缺口</span> → Skill 提问时发现资料缺失</p>
+        <p><span class="font-semibold" style="color:var(--bosch-green)">补充文档</span> → 收集并上传到 SharePoint</p>
+        <p><span class="font-semibold" style="color:var(--bosch-green)">更新引用</span> → Skill 关联新文档</p>
+        <p><span class="font-semibold" style="color:var(--bosch-green)">验证</span> → 重新运行确认效果</p>
+      </div>
+      <div class="mt-4 pt-3 border-t border-gray-100">
+        <p class="text-xs text-gray-400">节奏：持续发现，每两周批量更新</p>
+      </div>
+    </div>
+
+    <!-- UI Iteration -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style="background:var(--bosch-teal)">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+      </div>
+      <h3 class="font-bold text-base mb-2">UI 迭代循环</h3>
+      <div class="space-y-2 text-sm text-gray-600">
+        <p><span class="font-semibold" style="color:var(--bosch-teal)">用户使用</span> → 真实场景操作</p>
+        <p><span class="font-semibold" style="color:var(--bosch-teal)">收集反馈</span> → UX 问题、功能需求</p>
+        <p><span class="font-semibold" style="color:var(--bosch-teal)">优化交互</span> → 改进流程和视觉</p>
+        <p><span class="font-semibold" style="color:var(--bosch-teal)">发布新版本</span> → Artifact 更新</p>
+      </div>
+      <div class="mt-4 pt-3 border-t border-gray-100">
+        <p class="text-xs text-gray-400">节奏：Sprint 4 起持续，Bug 即时修复</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sprint Ceremonies -->
+  <div class="mt-6 bg-white rounded-xl border border-gray-200 p-6">
+    <h3 class="font-bold text-base mb-4" style="color:var(--bosch-dark-blue)">敏捷仪式</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="border-l-4 pl-4" style="border-color:var(--bosch-blue)">
+        <p class="text-sm font-semibold">每日站会</p>
+        <p class="text-xs text-gray-500 mt-1">15 分钟，同步进展、阻塞和当日计划</p>
+      </div>
+      <div class="border-l-4 pl-4" style="border-color:var(--bosch-green)">
+        <p class="text-sm font-semibold">Sprint 评审</p>
+        <p class="text-xs text-gray-500 mt-1">每 Sprint 末尾，演示成果，收集反馈</p>
+      </div>
+      <div class="border-l-4 pl-4" style="border-color:var(--bosch-orange)">
+        <p class="text-sm font-semibold">Sprint 回顾</p>
+        <p class="text-xs text-gray-500 mt-1">复盘流程，识别改进点，调整下 Sprint</p>
+      </div>
+      <div class="border-l-4 pl-4" style="border-color:var(--bosch-purple)">
+        <p class="text-sm font-semibold">Sprint 计划</p>
+        <p class="text-xs text-gray-500 mt-1">基于回顾和反馈，规划下 Sprint 任务</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-white border-t border-gray-200 mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <p class="text-sm font-bold" style="color:var(--bosch-dark-blue)">8D D2 问题解决 AI 助手</p>
+        <p class="text-xs text-gray-500 mt-1">敏捷开发 · Skill 驱动 · 持续迭代 · MAICO Platform</p>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-gray-400">
+        <span>Invented for life</span>
+        <span>·</span>
+        <span>Bosch</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        const navHeight = document.querySelector('nav').offsetHeight;
+        window.scrollTo({ top: target.offsetTop - navHeight - 8, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      const top = s.offsetTop - 80;
+      if (window.scrollY >= top) current = s.id;
+    });
+    navLinks.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
